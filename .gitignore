@@ -1,5 +1,5 @@
-**/Debug/
-.settings
+bin/builddir
+doc/html
+doc/latex
+.*
 **/*.o
-**/Client
-doc/*
