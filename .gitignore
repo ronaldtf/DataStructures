@@ -1,4 +1,5 @@
 bin/builddir
+src/tree/BinaryTree
 doc/html
 doc/latex
 .*
