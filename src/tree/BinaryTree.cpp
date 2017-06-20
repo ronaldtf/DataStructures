@@ -129,8 +129,17 @@ void BinaryTree<T>::getStrings(Node<T>* root, const unsigned int level, const un
 	std::string valStr = "  ";
 	if (root != nullptr) {
 		valStr = t2str(root->value);
-		if (valStr.size() < NODESIZE)
-			valStr = " " + valStr;
+		if (valStr.size() < NODESIZE) {
+			int missing = (valStr.size() - NODESIZE)/2;
+			std::string tmpLeftStr = "";
+			std::string tmpRightStr = "";
+			if (missing > 0) {
+				std::cout << missing << std::endl;
+				std::string tmpLeftStr = std::string(missing, ' ');
+				std::string tmpRightStr = std::string(missing+1, ' ');
+			}
+			valStr = tmpLeftStr + valStr + tmpRightStr;
+		}
 	}
 	strs[level] += leftStr + valStr + rightStr;
 	if (level < height) {
@@ -142,6 +151,7 @@ void BinaryTree<T>::getStrings(Node<T>* root, const unsigned int level, const un
 			getStrings(root->right, level+1, height, strs);
 		}
 	}
+
 }
 
 template<typename T>
@@ -163,7 +173,10 @@ std::string BinaryTree<T>::t2str(T element) {
 	return os.str();
 }
 
-
+template struct Node<int>;
+template struct Node<float>;
+template struct Node<double>;
+template struct Node<std::string>;
 template class BinaryTree<int>;
 template class BinaryTree<float>;
 template class BinaryTree<double>;
