@@ -31,15 +31,18 @@ private:
 	Node<T>* root;
 	void getStrings(Node<T>* root, const unsigned int level, const unsigned int height, std::vector<std::string>& strs);
 	void deleteTree(Node<T>* root);
+	void getInorder(Node<T>* root, std::list<T>& orderedList);
+	void getPreorder(Node<T>* root, std::list<T>& orderedList);
+	void getPostorder(Node<T>* root, std::list<T>& orderedList);
 	std::string t2str(T element);
 public:
 	BinaryTree();
 	~BinaryTree();
 	void insert(const T& value);
+	void getInorder(std::list<T>& orderedList);
+	void getPreorder(std::list<T>& orderedList);
+	void getPostorder(std::list<T>& orderedList);
 	Node<T>* search(const T& element) const;
-	void getInorder(Node<T>* root, std::list<T>& orderedList);
-	void getPreorder(Node<T>* root, std::list<T>& orderedList);
-	void getPostorder(Node<T>* root, std::list<T>& orderedList);
 	unsigned int getHeight(Node<T>* root);
 	std::string toString();
 };

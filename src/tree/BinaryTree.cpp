@@ -70,6 +70,11 @@ Node<T>* BinaryTree<T>::search(const T& element) const {
 }
 
 template<typename T>
+void BinaryTree<T>::getInorder(std::list<T>& orderedList) {
+	getInorder(this->root, orderedList);
+}
+
+template<typename T>
 void BinaryTree<T>::getInorder(Node<T>* root, std::list<T>& orderedList) {
 	if (root == nullptr)
 		return;
@@ -81,14 +86,25 @@ void BinaryTree<T>::getInorder(Node<T>* root, std::list<T>& orderedList) {
 }
 
 template<typename T>
+void BinaryTree<T>::getPreorder(std::list<T>& orderedList) {
+	getPreorder(this->root, orderedList);
+}
+
+template<typename T>
 void BinaryTree<T>::getPreorder(Node<T>* root, std::list<T>& orderedList) {
 	if (root == nullptr)
 		return;
 	orderedList.push_back(root->value);
+
 	if (root->left != nullptr)
-		getInorder(root->left, orderedList);
+		getPreorder(root->left, orderedList);
 	if (root->right != nullptr)
-		getInorder(root->right, orderedList);
+		getPreorder(root->right, orderedList);
+}
+
+template<typename T>
+void BinaryTree<T>::getPostorder(std::list<T>& orderedList) {
+	getPostorder(this->root, orderedList);
 }
 
 template<typename T>
@@ -96,9 +112,9 @@ void BinaryTree<T>::getPostorder(Node<T>* root, std::list<T>& orderedList) {
 	if (root == nullptr)
 		return;
 	if (root->left != nullptr)
-		getInorder(root->left, orderedList);
+		getPostorder(root->left, orderedList);
 	if (root->right != nullptr)
-		getInorder(root->right, orderedList);
+		getPostorder(root->right, orderedList);
 	orderedList.push_back(root->value);
 }
 
