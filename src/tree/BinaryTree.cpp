@@ -54,9 +54,75 @@ void BinaryTree<T>::insert(const T& value) {
 }
 
 template<typename T>
-Node<T>* BinaryTree<T>::search(const T& element) const {
-	Node<T>* child = this->root;
+Node<T>* BinaryTree<T>::minNode(Node<T>* rootNode) {
+	Node<T>* min = rootNode;
+	Node<T>* child = rootNode;
 	while (child != nullptr) {
+		min = child;
+		child = child->left;
+	}
+	return min;
+}
+
+template<typename T>
+bool BinaryTree<T>::deleteNode(const T& value) {
+	return deleteNode(this->root, value);
+}
+
+template<typename T>
+bool BinaryTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
+
+	// Search the node to be removed
+	Node<T>* parentNode = nullptr;
+	Node<T>* currNode = search(rootNode, value, parentNode);
+
+	// Node has not found => cannot delete it
+	if (currNode == nullptr)
+		return false;
+
+	// ALGORITHM:
+	// Current node has only 0 or 1 child
+	if ((currNode->left == nullptr) || (currNode->right == nullptr)) {
+		Node<T>* childNode = (currNode->left != nullptr) ? currNode->left : ((currNode->right != nullptr) ? currNode->right : nullptr);
+		// 1. This is a root node => set child as root node
+		if (parentNode == nullptr)
+			rootNode = childNode;
+		// 2. Current node is not root => set current child as parent child
+		else {
+			if (currNode->value <= parentNode->value)
+				parentNode->left = childNode;
+			else
+				parentNode->right = childNode;
+		}
+		delete currNode;
+		currNode = nullptr;
+	}
+	// 2. The node has both right and left children => update the tree
+	else {
+		// 2.1 Find the minimum value in the right subtree
+		Node<T>* min = minNode(currNode->right);
+		// 2.2 Replace value of node to be removed with found minimum
+		currNode->value = min->value;
+		// 2.3 Apply remove to the right subtree to remove duplicate
+		delete min;
+		min = nullptr;
+		std::cout << "here min "<< currNode->value << std::endl;
+	}
+	return true;
+}
+
+template<typename T>
+Node<T>* BinaryTree<T>::search(const T& element) const {
+	Node<T>* parent = nullptr; // This is not used here
+	return search(this->root, element, parent);
+}
+
+template<typename T>
+Node<T>* BinaryTree<T>::search(Node<T>* rootNode, const T& element, Node<T>* parent) const {
+	Node<T>* child = rootNode;
+	parent = nullptr;
+	while (child != nullptr) {
+		parent = child;
 		if (child->value == element) {
 			return child;
 		}else if (child->value >= element) {
@@ -150,7 +216,6 @@ void BinaryTree<T>::getStrings(Node<T>* root, const unsigned int level, const un
 			std::string tmpLeftStr = "";
 			std::string tmpRightStr = "";
 			if (missing > 0) {
-				std::cout << missing << std::endl;
 				std::string tmpLeftStr = std::string(missing, ' ');
 				std::string tmpRightStr = std::string(missing+1, ' ');
 			}

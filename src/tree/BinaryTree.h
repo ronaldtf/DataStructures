@@ -34,15 +34,19 @@ private:
 	void getInorder(Node<T>* root, std::list<T>& orderedList);
 	void getPreorder(Node<T>* root, std::list<T>& orderedList);
 	void getPostorder(Node<T>* root, std::list<T>& orderedList);
+	bool deleteNode(Node<T>* rootNode, const T& value);
+	Node<T>* search(Node<T>* rootNode, const T& element, Node<T>* parent = nullptr) const;
+	Node<T>* minNode(Node<T>* rootNode);
 	std::string t2str(T element);
 public:
 	BinaryTree();
 	~BinaryTree();
 	void insert(const T& value);
+	bool deleteNode(const T& value);
+	Node<T>* search(const T& element) const;
 	void getInorder(std::list<T>& orderedList);
 	void getPreorder(std::list<T>& orderedList);
 	void getPostorder(std::list<T>& orderedList);
-	Node<T>* search(const T& element) const;
 	unsigned int getHeight(Node<T>* root);
 	std::string toString();
 };
