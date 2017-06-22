@@ -8,34 +8,37 @@
 #include <list>
 #include <string>
 
+/*
+ * This is the main, used for testing purposes
+ */
 int main() {
 
 	tree::BinaryTree<int> binaryTree = tree::BinaryTree<int>();
 
-//	binaryTree.insert(25);
-//	binaryTree.insert(15);
-//	binaryTree.insert(50);
-//	binaryTree.insert(10);
-//	binaryTree.insert(22);
-//	binaryTree.insert(35);
-//	binaryTree.insert(70);
-//	binaryTree.insert(4);
-//	binaryTree.insert(12);
-//	binaryTree.insert(18);
-//	binaryTree.insert(24);
-//	binaryTree.insert(31);
-//	binaryTree.insert(44);
-//	binaryTree.insert(66);
-//	binaryTree.insert(90);
+//	binaryTree.insertNode(25);
+//	binaryTree.insertNode(15);
+//	binaryTree.insertNode(50);
+//	binaryTree.insertNode(10);
+//	binaryTree.insertNode(22);
+//	binaryTree.insertNode(35);
+//	binaryTree.insertNode(70);
+//	binaryTree.insertNode(4);
+//	binaryTree.insertNode(12);
+//	binaryTree.insertNode(18);
+//	binaryTree.insertNode(24);
+//	binaryTree.insertNode(31);
+//	binaryTree.insertNode(44);
+//	binaryTree.insertNode(66);
+//	binaryTree.insertNode(90);
 
-	binaryTree.insert(5);
-	binaryTree.insert(9);
-	binaryTree.insert(3);
-	binaryTree.insert(1);
-	binaryTree.insert(6);
-	binaryTree.insert(14);
-	binaryTree.insert(4);
-	binaryTree.insert(0);
+	binaryTree.insertNode(5);
+	binaryTree.insertNode(9);
+	binaryTree.insertNode(3);
+	binaryTree.insertNode(1);
+	binaryTree.insertNode(6);
+	binaryTree.insertNode(14);
+	binaryTree.insertNode(4);
+	binaryTree.insertNode(0);
 
 	std::cout << "TREE:" << std::endl;
 	std::cout << binaryTree.toString() << std::endl;

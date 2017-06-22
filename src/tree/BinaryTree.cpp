@@ -23,7 +23,7 @@ BinaryTree<T>::~BinaryTree() {
 }
 
 template<typename T>
-void BinaryTree<T>::insert(const T& value) {
+void BinaryTree<T>::insertNode(const T& value) {
 	// The tree does not have a root element
 	if (this->root == nullptr) {
 		this->root = new Node<T>(value);
