@@ -54,15 +54,12 @@ void BinaryTree<T>::insert(const T& value) {
 }
 
 template<typename T>
-Node<T>* BinaryTree<T>::minNode(Node<T>* rootNode, Node<T>** parent) {
+Node<T>* BinaryTree<T>::minNode(Node<T>* rootNode) const {
 	if (rootNode == nullptr)
 		return nullptr;
-
 	Node<T>* min = rootNode;
-	while (min->left != nullptr) {
-		*parent = min;
+	while (min->left != nullptr)
 		min = min->left;
-	}
 	return min;
 }
 
@@ -104,19 +101,13 @@ bool BinaryTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 	// 2. The node has both right and left children => update the tree
 	else {
 		// 2.1 Find the minimum value in the right subtree
-		Node<T>* parent = nullptr;
-		Node<T>* min = minNode(currNode->right, &parent);
-
-		// 2.2 Replace value of node to be removed with found minimum
-		currNode->value = min->value;
-		// 2.3 Apply remove to the right subtree to remove duplicate
-		if (parent == nullptr)
-			// There is only a right child => remove it
-			currNode->right = nullptr;
-		else
-			parent->left = nullptr;
-		delete min;
-		min = nullptr;
+		Node<T>* min = minNode(currNode->right);
+		// 2.2 Get minimum value
+		T minValue = min->value;
+		// 2.3 Remove node with such value
+		deleteNode(currNode, minValue);
+		// 2.4 Update current node value
+		currNode->value = minValue;
 	}
 	return true;
 }
