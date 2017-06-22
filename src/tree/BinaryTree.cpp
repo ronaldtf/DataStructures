@@ -54,12 +54,14 @@ void BinaryTree<T>::insert(const T& value) {
 }
 
 template<typename T>
-Node<T>* BinaryTree<T>::minNode(Node<T>* rootNode) {
+Node<T>* BinaryTree<T>::minNode(Node<T>* rootNode, Node<T>** parent) {
+	if (rootNode == nullptr)
+		return nullptr;
+
 	Node<T>* min = rootNode;
-	Node<T>* child = rootNode;
-	while (child != nullptr) {
-		min = child;
-		child = child->left;
+	while (min->left != nullptr) {
+		*parent = min;
+		min = min->left;
 	}
 	return min;
 }
@@ -72,10 +74,12 @@ bool BinaryTree<T>::deleteNode(const T& value) {
 template<typename T>
 bool BinaryTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 
+	if (rootNode == nullptr)
+		return false;
+
 	// Search the node to be removed
 	Node<T>* parentNode = nullptr;
-	Node<T>* currNode = search(rootNode, value, parentNode);
-
+	Node<T>* currNode = search(rootNode, value, &parentNode);
 	// Node has not found => cannot delete it
 	if (currNode == nullptr)
 		return false;
@@ -100,13 +104,19 @@ bool BinaryTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 	// 2. The node has both right and left children => update the tree
 	else {
 		// 2.1 Find the minimum value in the right subtree
-		Node<T>* min = minNode(currNode->right);
+		Node<T>* parent = nullptr;
+		Node<T>* min = minNode(currNode->right, &parent);
+
 		// 2.2 Replace value of node to be removed with found minimum
 		currNode->value = min->value;
 		// 2.3 Apply remove to the right subtree to remove duplicate
+		if (parent == nullptr)
+			// There is only a right child => remove it
+			currNode->right = nullptr;
+		else
+			parent->left = nullptr;
 		delete min;
 		min = nullptr;
-		std::cout << "here min "<< currNode->value << std::endl;
 	}
 	return true;
 }
@@ -114,21 +124,22 @@ bool BinaryTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 template<typename T>
 Node<T>* BinaryTree<T>::search(const T& element) const {
 	Node<T>* parent = nullptr; // This is not used here
-	return search(this->root, element, parent);
+	return search(this->root, element, &parent);
 }
 
 template<typename T>
-Node<T>* BinaryTree<T>::search(Node<T>* rootNode, const T& element, Node<T>* parent) const {
+Node<T>* BinaryTree<T>::search(Node<T>* rootNode, const T& element, Node<T>** parent) const {
 	Node<T>* child = rootNode;
-	parent = nullptr;
 	while (child != nullptr) {
-		parent = child;
 		if (child->value == element) {
 			return child;
-		}else if (child->value >= element) {
-			child = child->left;
 		} else {
-			child = child->right;
+			*parent = child;
+			if (child->value >= element) {
+				child = child->left;
+			} else {
+				child = child->right;
+			}
 		}
 	}
 	// Not found

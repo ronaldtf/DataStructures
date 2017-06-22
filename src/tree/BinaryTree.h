@@ -35,8 +35,8 @@ private:
 	void getPreorder(Node<T>* root, std::list<T>& orderedList);
 	void getPostorder(Node<T>* root, std::list<T>& orderedList);
 	bool deleteNode(Node<T>* rootNode, const T& value);
-	Node<T>* search(Node<T>* rootNode, const T& element, Node<T>* parent = nullptr) const;
-	Node<T>* minNode(Node<T>* rootNode);
+	Node<T>* search(Node<T>* rootNode, const T& element, Node<T>** parent) const;
+	Node<T>* minNode(Node<T>* rootNode, Node<T>** parent);
 	std::string t2str(T element);
 public:
 	BinaryTree();

@@ -65,15 +65,22 @@ int main() {
 	}
 	std::cout << std::endl;
 
+	std::cout << "Remove element 5" << std::endl;
 	binaryTree.deleteNode(5);
-	//std::cout << binaryTree.toString() << std::endl;
-	orderedList.clear();
-	std::cout << std::endl << "POST-ORDER: ";
-	binaryTree.getPostorder(orderedList);
-	for (int i : orderedList) {
-		std::cout << i << " ";
-	}
-	std::cout << std::endl;
+	std::cout << binaryTree.toString() << std::endl;
+
+	std::cout << "Remove element 14" << std::endl;
+	binaryTree.deleteNode(14);
+	std::cout << binaryTree.toString() << std::endl;
+
+	std::cout << "Remove element 3" << std::endl;
+	binaryTree.deleteNode(3);
+	std::cout << binaryTree.toString() << std::endl;
+
+	std::cout << "Remove element 0" << std::endl;
+	binaryTree.deleteNode(0);
+	std::cout << binaryTree.toString() << std::endl;
+
 	return 0;
 }
 
