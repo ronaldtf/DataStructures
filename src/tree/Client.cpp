@@ -3,7 +3,7 @@
  * @author Ronald T. Fernandez
  * @version 1.0
  */
-#include "BinaryTree.h"
+#include "BinarySearchTree.h"
 #include <iostream>
 #include <list>
 #include <string>
@@ -13,7 +13,7 @@
  */
 int main() {
 
-	tree::BinaryTree<int> binaryTree = tree::BinaryTree<int>();
+	tree::BinarySearchTree<int> binaryTree = tree::BinarySearchTree<int>();
 
 //	binaryTree.insertNode(25);
 //	binaryTree.insertNode(15);

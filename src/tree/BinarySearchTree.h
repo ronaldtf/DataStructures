@@ -4,8 +4,8 @@
  * @version 1.0
  */
 
-#ifndef SRC_TREE_BINARYTREE_H_
-#define SRC_TREE_BINARYTREE_H_
+#ifndef SRC_TREE_BINARYSEARCHTREE_H_
+#define SRC_TREE_BINARYSEARCHTREE_H_
 
 #include <list>
 #include <string>
@@ -35,7 +35,7 @@ struct Node {
  * This class implements the needed methods in a binary tree
  */
 template<typename T>
-class BinaryTree {
+class BinarySearchTree {
 private:
 	/**
 	 * Root node in the binary tree
@@ -106,11 +106,11 @@ public:
 	/**
 	 * Class constructor
 	 */
-	BinaryTree();
+	BinarySearchTree();
 	/**
 	 * Class destructor (calls the deleteTree() method)
 	 */
-	~BinaryTree();
+	~BinarySearchTree();
 	/**
 	 * Insert a new node with a given value in the tree
 	 * @param[in] value Value to insert in the tree
@@ -158,4 +158,4 @@ public:
 
 } /* namespace tree */
 
-#endif /* SRC_TREE_BINARYTREE_H_ */
+#endif /* SRC_TREE_BINARYSEARCHTREE_H_ */
