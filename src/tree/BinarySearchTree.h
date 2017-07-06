@@ -11,36 +11,16 @@
 #include <string>
 #include <vector>
 
-namespace tree {
+#include "BinaryTree.h"
 
-/**
- * This structure represents a node in the binary tree
- */
-template<typename T>
-struct Node {
-	// Value of the node
-	T value;
-	// Children
-	Node* left;
-	Node* right;
-	// Constructor
-	Node(T value) {
-		this->value = value;
-		this->left = nullptr;
-		this->right = nullptr;
-	}
-};
+namespace tree {
 
 /**
  * This class implements the needed methods in a binary tree
  */
 template<typename T>
-class BinarySearchTree {
+class BinarySearchTree : public BinaryTree<T> {
 private:
-	/**
-	 * Root node in the binary tree
-	 */
-	Node<T>* root;
 	/**
 	 * Get the list of elements for every level in a formatted string, using enough spaces between them
 	 * in order to draw the tree correctly
@@ -50,10 +30,6 @@ private:
 	 * @param[out] strs List of strings, each per tree level
 	 */
 	void getStrings(Node<T>* root, const unsigned int level, const unsigned int height, std::vector<std::string>& strs);
-	/**
-	 * Removes the entire tree
-	 */
-	void deleteTree(Node<T>* root);
 	/**
 	 * Go along the tree in an in-order order.
 	 * @param[in] root Root node
@@ -119,40 +95,41 @@ public:
 	/**
 	 * Removes a node with a given value
 	 * @param[in] value Value to remove from the tree
+	 * @see BinaryTree
 	 */
 	bool deleteNode(const T& value);
 	/**
 	 * Look for a node with a value
 	 * @param[in] element Value to search in the tree
 	 * @return Returns the node with the given value, or nullptr in case it was not found
+	 * @see BinaryTree
 	 */
 	Node<T>* search(const T& element) const;
 	/**
 	 * Go along the tree in an in-order order.
 	 * @param[out] orderedList List in n pre-order order
+	 * @see BinaryTree
 	 */
 	void getInorder(std::list<T>& orderedList);
 	/**
 	 * Go along the tree in a pre-order order.
 	 * @param[out] orderedList List in n pre-order order
+	 * @see BinaryTree
 	 */
 	void getPreorder(std::list<T>& orderedList);
 	/**
 	 * Go along the tree in a post-order order.
 	 * @param[out] orderedList List in n pre-order order
+	 * @see BinaryTree
 	 */
 	void getPostorder(std::list<T>& orderedList);
 	/**
 	 * Get the height of the tree
 	 * @param[in] root Node where to start calculating the height from
 	 * @return Tree height
+	 * @see BinaryTree
 	 */
 	unsigned int getHeight(Node<T>* root);
-	/**
-	 * Converts the tree into a printable format
-	 * @return Returns the string with the tree structure
-	 */
-	std::string toString();
 };
 
 

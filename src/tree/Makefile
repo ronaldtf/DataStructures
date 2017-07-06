@@ -1,6 +1,7 @@
 FLAGS = -g -std=c++11 -Wall
 all:
 	g++ $(FLAGS) -c BinarySearchTree.cpp
-	g++ $(FLAGS) -o BinarySearchTree BinarySearchTree.o Client.cpp
+	g++ $(FLAGS) -c AVLTree.cpp
+	g++ $(FLAGS) -o BinaryTree BinarySearchTree.o AVLTree.o Client.cpp
 clean:
-	rm *.o BinarySearchTree
+	rm *.o BinaryTree

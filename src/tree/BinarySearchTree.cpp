@@ -4,32 +4,26 @@
  * @version 1.0
  */
 
-#include <cmath>
-#include <iostream>
-#include <sstream>
-
 #include "BinarySearchTree.h"
 
 namespace tree {
 
 template<typename T>
 BinarySearchTree<T>::BinarySearchTree() {
-	this->root = nullptr;
 }
 
 template<typename T>
 BinarySearchTree<T>::~BinarySearchTree() {
-	deleteTree(this->root);
 }
 
 template<typename T>
 void BinarySearchTree<T>::insertNode(const T& value) {
 	// The tree does not have a root element
-	if (this->root == nullptr) {
-		this->root = new Node<T>(value);
+	if (BinaryTree<T>::root == nullptr) {
+		BinaryTree<T>::root = new Node<T>(value);
 	} else {
 		// Get the root
-		Node<T>* child = this->root;
+		Node<T>* child = BinaryTree<T>::root;
 
 		// Go across the tree to search the corresponding gap for the element
 		while (true) {
@@ -65,7 +59,7 @@ Node<T>* BinarySearchTree<T>::minNode(Node<T>* rootNode) const {
 
 template<typename T>
 bool BinarySearchTree<T>::deleteNode(const T& value) {
-	return deleteNode(this->root, value);
+	return deleteNode(BinaryTree<T>::root, value);
 }
 
 template<typename T>
@@ -115,7 +109,7 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 template<typename T>
 Node<T>* BinarySearchTree<T>::search(const T& element) const {
 	Node<T>* parent = nullptr; // This is not used here
-	return search(this->root, element, &parent);
+	return search(BinaryTree<T>::root, element, &parent);
 }
 
 template<typename T>
@@ -139,7 +133,7 @@ Node<T>* BinarySearchTree<T>::search(Node<T>* rootNode, const T& element, Node<T
 
 template<typename T>
 void BinarySearchTree<T>::getInorder(std::list<T>& orderedList) {
-	getInorder(this->root, orderedList);
+	getInorder(BinaryTree<T>::root, orderedList);
 }
 
 template<typename T>
@@ -155,7 +149,7 @@ void BinarySearchTree<T>::getInorder(Node<T>* root, std::list<T>& orderedList) {
 
 template<typename T>
 void BinarySearchTree<T>::getPreorder(std::list<T>& orderedList) {
-	getPreorder(this->root, orderedList);
+	getPreorder(BinaryTree<T>::root, orderedList);
 }
 
 template<typename T>
@@ -172,7 +166,7 @@ void BinarySearchTree<T>::getPreorder(Node<T>* root, std::list<T>& orderedList) 
 
 template<typename T>
 void BinarySearchTree<T>::getPostorder(std::list<T>& orderedList) {
-	getPostorder(this->root, orderedList);
+	getPostorder(BinaryTree<T>::root, orderedList);
 }
 
 template<typename T>
@@ -187,79 +181,12 @@ void BinarySearchTree<T>::getPostorder(Node<T>* root, std::list<T>& orderedList)
 }
 
 template<typename T>
-void BinarySearchTree<T>::deleteTree(Node<T>* root) {
-	if (root == nullptr)
-		return;
-	deleteTree(root->right);
-	deleteTree(root->left);
-	delete root;
-}
-
-template<typename T>
 unsigned int BinarySearchTree<T>::getHeight(Node<T>* root) {
 	if (root == nullptr)
 		return 0;
 	return 1 + std::max(getHeight(root->right), getHeight(root->left));
 }
 
-template<typename T>
-void BinarySearchTree<T>::getStrings(Node<T>* root, const unsigned int level, const unsigned int height, std::vector<std::string>& strs) {
-	// Number of nodes in level i: 2^n
-
-	static unsigned short NODESIZE = 2;
-	int spaces = std::pow(2, height-level) - 1;
-	std::string leftStr = std::string((NODESIZE*spaces), ' ');
-	std::string rightStr = std::string(NODESIZE*(spaces + 1), ' ');
-	std::string valStr = "  ";
-	if (root != nullptr) {
-		valStr = t2str(root->value);
-		if (valStr.size() < NODESIZE) {
-			int missing = (valStr.size() - NODESIZE)/2;
-			std::string tmpLeftStr = "";
-			std::string tmpRightStr = "";
-			if (missing > 0) {
-				std::string tmpLeftStr = std::string(NODESIZE*missing, ' ');
-				std::string tmpRightStr = std::string(NODESIZE*(missing+1), ' ');
-			}
-			valStr = tmpLeftStr + valStr + tmpRightStr;
-		}
-	}
-	strs[level] += leftStr + valStr + rightStr;
-	if (level < height) {
-		if (root == nullptr) {
-			getStrings(root, level+1, height, strs);
-			getStrings(root, level+1, height, strs);
-		} else {
-			getStrings(root->left, level+1, height, strs);
-			getStrings(root->right, level+1, height, strs);
-		}
-	}
-
-}
-
-template<typename T>
-std::string BinarySearchTree<T>::toString() {
-	std::string output = "";
-	unsigned int height = getHeight(this->root);
-	std::vector<std::string> outStrs = std::vector<std::string>(height + 1, "");
-	getStrings(this->root, 0, height, outStrs);
-	for (std::string s : outStrs) {
-		output += s + "\n";
-	}
-	return output;
-}
-
-template<typename T>
-std::string BinarySearchTree<T>::t2str(T element) {
-	std::ostringstream os;
-	os << element;
-	return os.str();
-}
-
-template struct Node<int>;
-template struct Node<float>;
-template struct Node<double>;
-template struct Node<std::string>;
 template class BinarySearchTree<int>;
 template class BinarySearchTree<float>;
 template class BinarySearchTree<double>;
