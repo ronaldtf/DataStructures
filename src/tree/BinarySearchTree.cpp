@@ -9,7 +9,7 @@
 namespace tree {
 
 template<typename T>
-BinarySearchTree<T>::BinarySearchTree() {
+BinarySearchTree<T>::BinarySearchTree() : BinaryTree<T>() {
 }
 
 template<typename T>

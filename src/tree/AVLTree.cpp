@@ -9,7 +9,7 @@
 namespace tree {
 
 template<typename T>
-AVLTree<T>::AVLTree() {
+AVLTree<T>::AVLTree() : BinaryTree<T>() {
 }
 
 template<typename T>

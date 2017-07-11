@@ -12,9 +12,18 @@
 
 namespace tree {
 
+/**
+ * This class implements an AVL tree as a particular case of a BinaryTree.
+ * The difference between this and a BinarySearchTree is that this tree
+ * is balanced, i.e. the difference between the shortest and the longest
+ * path is, as much, 1
+ */
 template<typename T>
 class AVLTree: public BinaryTree<T> {
 public:
+	/**
+	 * Class constructor
+	 */
 	AVLTree();
 	/**
 	 * Insert a new node with a given value in the tree
