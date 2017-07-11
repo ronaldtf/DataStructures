@@ -9,6 +9,16 @@
 namespace tree {
 
 template<typename T>
+BinaryTree<T>::BinaryTree() : root(nullptr) {
+
+};
+
+template<typename T>
+BinaryTree<T>::~BinaryTree() {
+	deleteTree(this->root);
+};
+
+template<typename T>
 Node<T>* BinaryTree<T>::search(const T& element) const {
 	Node<T>* parent = nullptr; // This is not used here
 	return search(BinaryTree<T>::root, element, &parent);
@@ -87,6 +97,11 @@ unsigned int BinaryTree<T>::getHeight(Node<T>* root) const {
 	if (root == nullptr)
 		return 0;
 	return 1 + std::max(getHeight(root->right), getHeight(root->left));
+}
+
+template<typename T>
+unsigned int BinaryTree<T>::getHeight() const {
+	return getHeight(this->root);
 }
 
 template<typename T>

@@ -39,15 +39,6 @@ struct Node {
  */
 template<typename T>
 class BinaryTree {
-protected:
-	/**
-	 * Root node in the binary tree
-	 */
-	Node<T>* root;
-	BinaryTree() : root(nullptr) {};
-	~BinaryTree() {
-		deleteTree(this->root);
-	};
 public:
 	/**
 	 * Insert a new node with a given value in the tree
@@ -82,16 +73,28 @@ public:
 	void getPostorder(std::list<T>& orderedList) const;
 	/**
 	 * Get the height of the tree
-	 * @param[in] root Node where to start calculating the height from
-	 * @return Tree height
+	 * @return Height of the tree
 	 */
-	unsigned int getHeight(Node<T>* root) const;
+	unsigned int getHeight() const;
 	/**
 	 * Converts the tree into a printable format
 	 * @return Returns the string with the tree structure
 	 */
 	std::string toString() const;
 protected:
+	/**
+	 * Root node in the binary tree
+	 */
+	Node<T>* root;
+	/**
+	 * Class constructor
+	 */
+	BinaryTree();
+	/**
+	 * Class destructor
+	 */
+	~BinaryTree();
+
 	/**
 	 * Go along the tree in an in-order order.
 	 * @param[in] root Root node
@@ -139,6 +142,12 @@ protected:
 	 * @param[out] strs List of strings corresponding to each level
 	 */
 	void getStrings(Node<T>* root, const unsigned int level, const unsigned int height, std::vector<std::string>& strs) const;
+	/**
+	 * Get the height of the tree
+	 * @param[in] root Node where to start calculating the height from
+	 * @return Tree height
+	 */
+	unsigned int getHeight(Node<T>* root) const;
 
 };
 
