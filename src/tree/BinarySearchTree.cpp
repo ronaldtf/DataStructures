@@ -70,7 +70,7 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 
 	// Search the node to be removed
 	Node<T>* parentNode = nullptr;
-	Node<T>* currNode = search(rootNode, value, &parentNode);
+	Node<T>* currNode = this->search(rootNode, value, &parentNode);
 	// Node has not found => cannot delete it
 	if (currNode == nullptr)
 		return false;
@@ -104,87 +104,6 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, const T& value) {
 		currNode->value = minValue;
 	}
 	return true;
-}
-
-template<typename T>
-Node<T>* BinarySearchTree<T>::search(const T& element) const {
-	Node<T>* parent = nullptr; // This is not used here
-	return search(BinaryTree<T>::root, element, &parent);
-}
-
-template<typename T>
-Node<T>* BinarySearchTree<T>::search(Node<T>* rootNode, const T& element, Node<T>** parent) const {
-	Node<T>* child = rootNode;
-	while (child != nullptr) {
-		if (child->value == element) {
-			return child;
-		} else {
-			*parent = child;
-			if (child->value >= element) {
-				child = child->left;
-			} else {
-				child = child->right;
-			}
-		}
-	}
-	// Not found
-	return nullptr;
-}
-
-template<typename T>
-void BinarySearchTree<T>::getInorder(std::list<T>& orderedList) {
-	getInorder(BinaryTree<T>::root, orderedList);
-}
-
-template<typename T>
-void BinarySearchTree<T>::getInorder(Node<T>* root, std::list<T>& orderedList) {
-	if (root == nullptr)
-		return;
-	if (root->left != nullptr)
-		getInorder(root->left, orderedList);
-	orderedList.push_back(root->value);
-	if (root->right != nullptr)
-		getInorder(root->right, orderedList);
-}
-
-template<typename T>
-void BinarySearchTree<T>::getPreorder(std::list<T>& orderedList) {
-	getPreorder(BinaryTree<T>::root, orderedList);
-}
-
-template<typename T>
-void BinarySearchTree<T>::getPreorder(Node<T>* root, std::list<T>& orderedList) {
-	if (root == nullptr)
-		return;
-	orderedList.push_back(root->value);
-
-	if (root->left != nullptr)
-		getPreorder(root->left, orderedList);
-	if (root->right != nullptr)
-		getPreorder(root->right, orderedList);
-}
-
-template<typename T>
-void BinarySearchTree<T>::getPostorder(std::list<T>& orderedList) {
-	getPostorder(BinaryTree<T>::root, orderedList);
-}
-
-template<typename T>
-void BinarySearchTree<T>::getPostorder(Node<T>* root, std::list<T>& orderedList) {
-	if (root == nullptr)
-		return;
-	if (root->left != nullptr)
-		getPostorder(root->left, orderedList);
-	if (root->right != nullptr)
-		getPostorder(root->right, orderedList);
-	orderedList.push_back(root->value);
-}
-
-template<typename T>
-unsigned int BinarySearchTree<T>::getHeight(Node<T>* root) {
-	if (root == nullptr)
-		return 0;
-	return 1 + std::max(getHeight(root->right), getHeight(root->left));
 }
 
 template class BinarySearchTree<int>;
