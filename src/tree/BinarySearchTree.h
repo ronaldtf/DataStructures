@@ -8,6 +8,7 @@
 #define SRC_TREE_BINARYSEARCHTREE_H_
 
 #include "BinaryTree.h"
+#include "Node.h"
 
 namespace tree {
 
@@ -15,7 +16,7 @@ namespace tree {
  * This class implements the needed methods in a binary tree
  */
 template<typename T>
-class BinarySearchTree : public BinaryTree<T> {
+class BinarySearchTree: public BinaryTree<T> {
 private:
 	/**
 	 * Removes a node in the tree with a given value
@@ -43,17 +44,16 @@ public:
 	~BinarySearchTree();
 	/**
 	 * Insert a new node with a given value in the tree
-	 * @param[in] value Value to insert in the tree
+	 * @param[in] node Node to insert in the tree
 	 */
-	void insertNode(const T& value);
+	void insertNode(Node<T>* node);
 	/**
 	 * Removes a node with a given value
-	 * @param[in] value Value to remove from the tree
+	 * @param[in] key Key to remove from the tree
 	 * @see BinaryTree
 	 */
-	bool deleteNode(const T& value);
+	bool deleteNode(const T& key);
 };
-
 
 } /* namespace tree */
 

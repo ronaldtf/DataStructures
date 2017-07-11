@@ -7,32 +7,13 @@
 #ifndef SRC_TREE_BINARYTREE_H_
 #define SRC_TREE_BINARYTREE_H_
 
-#include <cmath>
-#include <list>
-#include <sstream>
-#include <string>
-#include <vector>
 #include <iostream>
+#include <list>
+#include <vector>
+
+#include "Node.h"
 
 namespace tree {
-
-/**
- * This structure represents a node in the binary tree
- */
-template<typename T>
-struct Node {
-	// Value of the node
-	T value;
-	// Children
-	Node* left;
-	Node* right;
-	// Constructor
-	Node(T value) {
-		this->value = value;
-		this->left = nullptr;
-		this->right = nullptr;
-	}
-};
 
 /**
  * This class defines the method for a binary tree
@@ -42,35 +23,40 @@ class BinaryTree {
 public:
 	/**
 	 * Insert a new node with a given value in the tree
-	 * @param[in] value Value to insert in the tree
+	 * @param[in] key Node to insert in the tree
 	 */
-	virtual void insertNode(const T& value) = 0;
+	virtual void insertNode(Node<T>* node) = 0;
 	/**
 	 * Removes a node with a given value
-	 * @param[in] value Value to remove from the tree
+	 * @param[in] key Key to remove from the tree
 	 */
-	virtual bool deleteNode(const T& value) = 0;
+	virtual bool deleteNode(const T& key) = 0;
+	/**
+	 * Removes a node
+	 * @param[in] node Node to remove from the tree
+	 */
+	bool deleteNode(Node<T>* node);
 	/**
 	 * Look for a node with a value
-	 * @param[in] element Value to search in the tree
+	 * @param[in] key Key to search in the tree
 	 * @return Returns the node with the given value, or nullptr in case it was not found
 	 */
-	Node<T>* search(const T& element) const;
+	Node<T>* search(const T& key) const;
 	/**
 	 * Go along the tree in an in-order order.
 	 * @param[out] orderedList List in n pre-order order
 	 */
-	void getInorder(std::list<T>& orderedList) const;
+	void getInorder(std::list<Node<T>*>& orderedList) const;
 	/**
 	 * Go along the tree in a pre-order order.
 	 * @param[out] orderedList List in n pre-order order
 	 */
-	void getPreorder(std::list<T>& orderedList) const;
+	void getPreorder(std::list<Node<T>*>& orderedList) const;
 	/**
 	 * Go along the tree in a post-order order.
 	 * @param[out] orderedList List in n pre-order order
 	 */
-	void getPostorder(std::list<T>& orderedList) const;
+	void getPostorder(std::list<Node<T>*>& orderedList) const;
 	/**
 	 * Get the height of the tree
 	 * @return Height of the tree
@@ -100,28 +86,29 @@ protected:
 	 * @param[in] root Root node
 	 * @param[out] orderedList List in an in-order order
 	 */
-	void getInorder(Node<T>* root, std::list<T>& orderedList) const;
+	void getInorder(Node<T>* root, std::list<Node<T>*>& orderedList) const;
 	/**
 	 * Go along the tree in n pre-order order.
 	 * @param[in] root Root node
 	 * @param[out] orderedList List in a pre-order order
 	 */
-	void getPreorder(Node<T>* root, std::list<T>& orderedList) const;
+	void getPreorder(Node<T>* root, std::list<Node<T>*>& orderedList) const;
 	/**
 	 * Go along the tree in a post-order order.
 	 * @param[in] root Root node
 	 * @param[out] orderedList List in a post-order order
 	 */
-	void getPostorder(Node<T>* root, std::list<T>& orderedList) const;
+	void getPostorder(Node<T>* root, std::list<Node<T>*>& orderedList) const;
 	/**
 	 * Search an element in the tree
 	 * @param[in] rootNode Node where to start the search from
-	 * @param[in] element Value to search in the tree
+	 * @param[in] keyValue Value to search in the tree
 	 * @param[out] parent Parent node for the searched node (nullptr in case the value was
 	 * not found or the value is in the root node)
 	 * @return Returns the node with the given value, or nullptr in case it was not found
 	 */
-	Node<T>* search(Node<T>* rootNode, const T& element, Node<T>** parent) const;
+	Node<T>* search(Node<T>* rootNode, const T& keyValue,
+			Node<T>** parent) const;
 	/**
 	 * Deletes the tree from a node
 	 * @param[in] root Node to start removing
@@ -141,7 +128,8 @@ protected:
 	 * @param[in] height Tree height
 	 * @param[out] strs List of strings corresponding to each level
 	 */
-	void getStrings(Node<T>* root, const unsigned int level, const unsigned int height, std::vector<std::string>& strs) const;
+	void getStrings(Node<T>* root, const unsigned int level,
+			const unsigned int height, std::vector<std::string>& strs) const;
 	/**
 	 * Get the height of the tree
 	 * @param[in] root Node where to start calculating the height from
@@ -150,12 +138,6 @@ protected:
 	unsigned int getHeight(Node<T>* root) const;
 
 };
-
-
-template struct Node<int>;
-template struct Node<float>;
-template struct Node<double>;
-template struct Node<std::string>;
 
 } // end namespace tree
 

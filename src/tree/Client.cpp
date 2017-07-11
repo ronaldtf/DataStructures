@@ -31,40 +31,40 @@ int main() {
 //	binaryTree.insertNode(66);
 //	binaryTree.insertNode(90);
 
-	binaryTree.insertNode(5);
-	binaryTree.insertNode(9);
-	binaryTree.insertNode(3);
-	binaryTree.insertNode(1);
-	binaryTree.insertNode(6);
-	binaryTree.insertNode(14);
-	binaryTree.insertNode(4);
-	binaryTree.insertNode(0);
+	binaryTree.insertNode(new Node<int>(5));
+	binaryTree.insertNode(new ExtendedNode<int, int>(9, 9));
+	binaryTree.insertNode(new Node<int>(3));
+	binaryTree.insertNode(new Node<int>(1));
+	binaryTree.insertNode(new Node<int>(6));
+	binaryTree.insertNode(new Node<int>(14));
+	binaryTree.insertNode(new Node<int>(4));
+	binaryTree.insertNode(new Node<int>(0));
 
 	std::cout << "TREE:" << std::endl;
 	std::cout << binaryTree.toString() << std::endl;
 
-	std::list<int> orderedList;
+	std::list<Node<int>*> orderedList;
 	orderedList.clear();
 	std::cout << std::endl << "PRE-ORDER: ";
 	binaryTree.getPreorder(orderedList);
-	for (int i : orderedList) {
-		std::cout << i << " ";
+	for (Node<int>* i : orderedList) {
+		std::cout << i->key << " ";
 	}
 	std::cout << std::endl;
 
 	orderedList.clear();
 	std::cout << std::endl << "IN-ORDER: ";
 	binaryTree.getInorder(orderedList);
-	for (int i : orderedList) {
-		std::cout << i << " ";
+	for (Node<int>* i : orderedList) {
+		std::cout << i->key << " ";
 	}
 	std::cout << std::endl;
 
 	orderedList.clear();
 	std::cout << std::endl << "POST-ORDER: ";
 	binaryTree.getPostorder(orderedList);
-	for (int i : orderedList) {
-		std::cout << i << " ";
+	for (Node<int>* i : orderedList) {
+		std::cout << i->key << " ";
 	}
 	std::cout << std::endl;
 
@@ -86,5 +86,4 @@ int main() {
 
 	return 0;
 }
-
 

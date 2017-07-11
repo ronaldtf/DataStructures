@@ -10,19 +10,16 @@ namespace tree {
 
 template<typename T>
 AVLTree<T>::AVLTree() {
-	// TODO Auto-generated constructor stub
+}
+
+template<typename T>
+void AVLTree<T>::insertNode(const Node<T>* value) {
 
 }
 
 template<typename T>
-void AVLTree<T>::insertNode(const T& value) {
-
-}
-
-template<typename T>
-bool AVLTree<T>::deleteNode(const T& value){
+bool AVLTree<T>::deleteNode(const T& key) {
 	return false;
 }
-
 
 } /* namespace tree */
