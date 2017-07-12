@@ -28,9 +28,11 @@ public:
 	/**
 	 * Insert a new node with a given value in the tree
 	 * @param[in] node Node to insert in the tree
+	 * @return Returns true if the node has been inserted, or false
+	 * otherwise
 	 * @see BinaryTree
 	 */
-	void insertNode(const Node<T>* node);
+	bool insertNode(const Node<T>* node);
 	/**
 	 * Removes a node with a given value
 	 * @param[in] key Key to remove from the tree

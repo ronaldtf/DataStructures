@@ -25,7 +25,7 @@ public:
 	 * Insert a new node with a given value in the tree
 	 * @param[in] key Node to insert in the tree
 	 */
-	virtual void insertNode(Node<T>* node) = 0;
+	virtual bool insertNode(Node<T>* node);
 	/**
 	 * Removes a node with a given value
 	 * @param[in] key Key to remove from the tree

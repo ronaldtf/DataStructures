@@ -43,11 +43,6 @@ public:
 	 */
 	~BinarySearchTree();
 	/**
-	 * Insert a new node with a given value in the tree
-	 * @param[in] node Node to insert in the tree
-	 */
-	void insertNode(Node<T>* node);
-	/**
 	 * Removes a node with a given value
 	 * @param[in] key Key to remove from the tree
 	 * @see BinaryTree

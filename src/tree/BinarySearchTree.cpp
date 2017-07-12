@@ -17,40 +17,6 @@ BinarySearchTree<T>::~BinarySearchTree() {
 }
 
 template<typename T>
-void BinarySearchTree<T>::insertNode(Node<T>* node) {
-	if (node == nullptr)
-		return;
-
-	// The tree does not have a root element
-	if (BinaryTree<T>::root == nullptr) {
-		BinaryTree<T>::root = node;
-	} else {
-		// Get the root
-		Node<T>* child = BinaryTree<T>::root;
-
-		// Go across the tree to search the corresponding gap for the element
-		while (true) {
-			// Insert to the left
-			if (child->key >= node->key) {
-				if (child->left == nullptr) {
-					child->left = node;
-					break;
-				}
-				child = child->left;
-			}
-			// Insert to the right
-			else {
-				if (child->right == nullptr) {
-					child->right = node;
-					break;
-				}
-				child = child->right;
-			}
-		}
-	}
-}
-
-template<typename T>
 Node<T>* BinarySearchTree<T>::minNode(Node<T>* rootNode) const {
 	if (rootNode == nullptr)
 		return nullptr;

@@ -26,6 +26,42 @@ BinaryTree<T>::~BinaryTree() {
 ;
 
 template<typename T>
+bool BinaryTree<T>::insertNode(Node<T>* node) {
+	if (node == nullptr)
+		return false;
+
+	// The tree does not have a root element
+	if (BinaryTree<T>::root == nullptr) {
+		BinaryTree<T>::root = node;
+		return true;
+	} else {
+		// Get the root
+		Node<T>* child = BinaryTree<T>::root;
+
+		// Go across the tree to search the corresponding gap for the element
+		while (true) {
+			// Insert to the left
+			if (child->key > node->key) {
+				if (child->left == nullptr) {
+					child->left = node;
+					return true;
+				}
+				child = child->left;
+			}
+			// Insert to the right
+			else if (child->key < node->key) {
+				if (child->right == nullptr) {
+					child->right = node;
+					return true;
+				}
+				child = child->right;
+			} else
+				return false;
+		}
+	}
+}
+
+template<typename T>
 bool BinaryTree<T>::deleteNode(Node<T>* node) {
 	if (node == nullptr)
 		return false;
