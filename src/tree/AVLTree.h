@@ -10,6 +10,8 @@
 #include "BinaryTree.h"
 #include "Node.h"
 
+#include <stack>
+
 namespace tree {
 
 /**
@@ -20,6 +22,8 @@ namespace tree {
  */
 template<typename T>
 class AVLTree: public BinaryTree<T> {
+private:
+	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, Node<T>* node);
 public:
 	/**
 	 * Class constructor
