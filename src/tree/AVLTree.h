@@ -23,6 +23,14 @@ namespace tree {
 template<typename T>
 class AVLTree: public BinaryTree<T> {
 private:
+	/**
+	 * This method balances the tree by applying the RR, RL, LL, LR movements regarding
+	 * the condition of the balancing
+	 * @param[in] parent Parent of the unbalanced subtree
+	 * @param[in] stackTree Stack with the nodes from the bottom to the top after the
+	 * insertion
+	 * @param[in] node Node that has been inserted
+	 */
 	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, Node<T>* node);
 public:
 	/**
