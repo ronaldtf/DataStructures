@@ -9,11 +9,13 @@
 namespace tree {
 
 template<typename T>
-AVLTree<T>::AVLTree() : BinaryTree<T>() {
+AVLTree<T>::AVLTree() :
+		BinaryTree<T>() {
 }
 
 template<typename T>
-void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, Node<T>* node) {
+void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
+		Node<T>* node) {
 	Node<T>* x, y, z;
 
 //		LL CASE
@@ -57,15 +59,16 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, 
 //		  / \                              /  \
 //		T2   T3                           T3   T4
 
-	// If the stackTree is empty, the root node has 1 or 2 children.
-	// Otherwise, we have to check whether it is balanced or not
-	// To get the first unbalanced subtree, we go from the bottom to the top
-	// The first time we find the unbalanced tree, we balance it by using
-	// the RR, RL, LL or LR movement
+// If the stackTree is empty, the root node has 1 or 2 children.
+// Otherwise, we have to check whether it is balanced or not
+// To get the first unbalanced subtree, we go from the bottom to the top
+// The first time we find the unbalanced tree, we balance it by using
+// the RR, RL, LL or LR movement
 	while (!stackTree.empty()) {
 		Node<T>* subtree = stackTree.top();
 		stackTree.pop();
-		int balance = BinaryTree<T>::getHeight(subtree->right)-BinaryTree<T>::getHeight(subtree->left);
+		int balance = BinaryTree<T>::getHeight(subtree->right)
+				- BinaryTree<T>::getHeight(subtree->left);
 		if (std::abs(balance) > 1) {
 			if (balance == -1) { // => L
 				z = subtree;
@@ -115,59 +118,21 @@ template<typename T>
 bool AVLTree<T>::insertNode(const Node<T>* node) {
 
 	// This first part consists of inserting the node into the tree, without
-	// restrictions. We could have use the BinaryTree<T>::insert method except
-	// because we need to keep the nodes we go through in order to, later,
-	// go from the bottom to the top in case the tree is not balanced. Additionally,
-	// we need to keep the parent node
-
-	if (node == nullptr)
+	// restrictions.
+	std::stack<T> stackTree;
+	Node<T>* parent;
+	if (!BinaryTree<T>::insertNode(node, &stackTree, &parent))
 		return false;
 
-	std::stack<Node<T>* > stackTree = std::stack<Node<T>* >();
-	// The tree does not have a root element
-	if (BinaryTree<T>::root == nullptr) {
-		BinaryTree<T>::root = node;
-		return true;
-	} else {
-		// Get the root
-		Node<T>* child = BinaryTree<T>::root;
-		Node<T>* parent = nullptr;
-
-		// Go across the tree to search the corresponding gap for the element
-		while (true) {
-			parent = child;
-			// Insert to the left
-			if (child->key > node->key) {
-				if (child->left == nullptr) {
-					child->left = node;
-					break;
-				}
-				stackTree.push(child);
-				child = child->left;
-			}
-			// Insert to the right
-			else if (child->key < node->key) {
-				if (child->right == nullptr) {
-					child->right = node;
-					break;
-				}
-				stackTree.push(child);
-				child = child->right;
-			} else
-				return false;
-		}
-
-		// This second part consists of balancing the tree
-		balanceTree(&parent, stackTree, node);
-		return true;
-	}
-
+	// This second part consists of balancing the tree
+	balanceTree(&parent, stackTree, node);
+	return true;
 
 }
 
 template<typename T>
 bool AVLTree<T>::deleteNode(const T& key) {
-	return false;
+
 }
 
 } /* namespace tree */

@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <list>
+#include <stack>
 #include <vector>
 
 #include "Node.h"
@@ -136,6 +137,17 @@ protected:
 	 * @return Tree height
 	 */
 	unsigned int getHeight(Node<T>* root) const;
+
+	/**
+	 * This method inserts the not in the tree
+	 * @param[in] node Node to be inserted
+	 * @param[in|out] stackTree List of nodes indicating the path followed to insert
+	 * the new node. Note: if the stackTree is originally null, the insertion on the
+	 * stack will be ignored
+	 * @param[out] parent Parent of the inserted node
+	 * @return Returns true if the node has been inserted, false otherwise
+	 */
+	bool insertNode(Node<T>* node, std::stack<Node<T>*>* stackTree, Node<T>** parent);
 
 };
 

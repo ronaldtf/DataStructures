@@ -27,38 +27,8 @@ BinaryTree<T>::~BinaryTree() {
 
 template<typename T>
 bool BinaryTree<T>::insertNode(Node<T>* node) {
-	if (node == nullptr)
-		return false;
-
-	// The tree does not have a root element
-	if (BinaryTree<T>::root == nullptr) {
-		BinaryTree<T>::root = node;
-		return true;
-	} else {
-		// Get the root
-		Node<T>* child = BinaryTree<T>::root;
-
-		// Go across the tree to search the corresponding gap for the element
-		while (true) {
-			// Insert to the left
-			if (child->key > node->key) {
-				if (child->left == nullptr) {
-					child->left = node;
-					return true;
-				}
-				child = child->left;
-			}
-			// Insert to the right
-			else if (child->key < node->key) {
-				if (child->right == nullptr) {
-					child->right = node;
-					return true;
-				}
-				child = child->right;
-			} else
-				return false;
-		}
-	}
+	Node<T>* parent;
+	return insertNode(node, nullptr, &parent);
 }
 
 template<typename T>
@@ -219,6 +189,58 @@ void BinaryTree<T>::getStrings(Node<T>* root, const unsigned int level,
 			getStrings(root->left, level + 1, height, strs);
 			getStrings(root->right, level + 1, height, strs);
 		}
+	}
+
+}
+
+template<typename T>
+bool BinaryTree<T>::insertNode(Node<T>* node, std::stack<Node<T>*>* stackTree, Node<T>** parent) {
+
+	// This first part consists of inserting the node into the tree, without
+	// restrictions. We could have use the BinaryTree<T>::insert method except
+	// because we need to keep the nodes we go through in order to, later,
+	// go from the bottom to the top in case the tree is not balanced. Additionally,
+	// we need to keep the parent node
+
+	if (node == nullptr)
+		return false;
+
+	// The tree does not have a root element
+	if (BinaryTree<T>::root == nullptr) {
+		BinaryTree<T>::root = node;
+		return true;
+	} else {
+		// Get the root
+		Node<T>* child = BinaryTree<T>::root;
+		*parent = nullptr;
+
+		// Go across the tree to search the corresponding gap for the element
+		while (true) {
+			*parent = child;
+			// Insert to the left
+			if (child->key > node->key) {
+				if (child->left == nullptr) {
+					child->left = node;
+					break;
+				}
+				if (stackTree != nullptr)
+					stackTree->push(child);
+				child = child->left;
+			}
+			// Insert to the right
+			else if (child->key < node->key) {
+				if (child->right == nullptr) {
+					child->right = node;
+					break;
+				}
+				if (stackTree != nullptr)
+					stackTree->push(child);
+				child = child->right;
+			} else
+				return false;
+		}
+
+		return true;
 	}
 
 }
