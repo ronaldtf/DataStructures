@@ -20,8 +20,7 @@ struct Node {
 	Node* left;
 	Node* right;
 	// Constructor
-	Node(T key) {
-		this->key = key;
+	Node(const T key) : key(key) {
 		this->left = nullptr;
 		this->right = nullptr;
 	}

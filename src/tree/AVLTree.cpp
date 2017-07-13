@@ -15,8 +15,10 @@ AVLTree<T>::AVLTree() :
 
 template<typename T>
 void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
-		const T nodeKey) {
-	Node<T>* x, y, z;
+		T nodeKey) {
+	Node<T>* x;
+	Node<T>* y;
+	Node<T>* z;
 
 //		LL CASE
 //		___________________________________________________________
@@ -115,17 +117,17 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 }
 
 template<typename T>
-bool AVLTree<T>::insertNode(const Node<T>* node) {
+bool AVLTree<T>::insertNode(Node<T>* node) {
 
 	// This first part consists of inserting the node into the tree, without
 	// restrictions.
-	std::stack<T> stackTree;
+	std::stack<Node<T>*> stackTree;
 	Node<T>* parent;
 	if (!BinarySearchTree<T>::insertNode(node, &stackTree, &parent))
 		return false;
 
 	// This second part consists of balancing the tree
-	balanceTree(&parent, stackTree, node);
+	balanceTree(&parent, stackTree, node->key);
 	return true;
 
 }
@@ -141,5 +143,10 @@ bool AVLTree<T>::deleteNode(const T& key) {
 	balanceTree(&parent, stackTree, key);
 	return true;
 }
+
+template class AVLTree<int> ;
+template class AVLTree<float> ;
+template class AVLTree<double> ;
+template class AVLTree<std::string> ;
 
 } /* namespace tree */

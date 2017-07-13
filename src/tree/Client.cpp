@@ -3,6 +3,7 @@
  * @author Ronald T. Fernandez
  * @version 1.0
  */
+#include "AVLTree.h"
 #include "BinarySearchTree.h"
 #include <iostream>
 #include <list>
@@ -13,7 +14,7 @@
  */
 int main() {
 
-	tree::BinarySearchTree<int> binaryTree = tree::BinarySearchTree<int>();
+	tree::AVLTree<int> binaryTree = tree::AVLTree<int>();
 
 //	binaryTree.insertNode(25);
 //	binaryTree.insertNode(15);

@@ -31,7 +31,7 @@ private:
 	 * insertion
 	 * @param[in] nodeKey Key of the last node inserted
 	 */
-	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, const T nodeKey);
+	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, T nodeKey);
 public:
 	/**
 	 * Class constructor
@@ -44,7 +44,7 @@ public:
 	 * otherwise
 	 * @see BinaryTree
 	 */
-	bool insertNode(const Node<T>* node);
+	bool insertNode(Node<T>* node);
 	/**
 	 * Removes a node with a given value
 	 * @param[in] key Key to remove from the tree
