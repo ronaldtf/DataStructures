@@ -7,7 +7,7 @@
 #ifndef SRC_TREE_AVLTREE_H_
 #define SRC_TREE_AVLTREE_H_
 
-#include "BinaryTree.h"
+#include "BinarySearchTree.h"
 #include "Node.h"
 
 #include <stack>
@@ -21,7 +21,7 @@ namespace tree {
  * path is, as much, 1
  */
 template<typename T>
-class AVLTree: public BinaryTree<T> {
+class AVLTree: public BinarySearchTree<T> {
 private:
 	/**
 	 * This method balances the tree by applying the RR, RL, LL, LR movements regarding

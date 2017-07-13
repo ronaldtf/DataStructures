@@ -10,7 +10,7 @@ namespace tree {
 
 template<typename T>
 AVLTree<T>::AVLTree() :
-		BinaryTree<T>() {
+		BinarySearchTree<T>() {
 }
 
 template<typename T>
@@ -67,8 +67,8 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 	while (!stackTree.empty()) {
 		Node<T>* subtree = stackTree.top();
 		stackTree.pop();
-		int balance = BinaryTree<T>::getHeight(subtree->right)
-				- BinaryTree<T>::getHeight(subtree->left);
+		int balance = BinarySearchTree<T>::getHeight(subtree->right)
+				- BinarySearchTree<T>::getHeight(subtree->left);
 		if (std::abs(balance) > 1) {
 			if (balance == -1) { // => L
 				z = subtree;
@@ -121,7 +121,7 @@ bool AVLTree<T>::insertNode(const Node<T>* node) {
 	// restrictions.
 	std::stack<T> stackTree;
 	Node<T>* parent;
-	if (!BinaryTree<T>::insertNode(node, &stackTree, &parent))
+	if (!BinarySearchTree<T>::insertNode(node, &stackTree, &parent))
 		return false;
 
 	// This second part consists of balancing the tree
@@ -129,6 +129,8 @@ bool AVLTree<T>::insertNode(const Node<T>* node) {
 	return true;
 
 }
+
+
 
 template<typename T>
 bool AVLTree<T>::deleteNode(const T& key) {
