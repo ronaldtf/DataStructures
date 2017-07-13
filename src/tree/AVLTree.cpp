@@ -15,7 +15,7 @@ AVLTree<T>::AVLTree() :
 
 template<typename T>
 void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
-		Node<T>* node) {
+		const T nodeKey) {
 	Node<T>* x, y, z;
 
 //		LL CASE
@@ -73,7 +73,7 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 			if (balance == -1) { // => L
 				z = subtree;
 				y = subtree->left;
-				if (node->key > subtree->left->key) { // => L+R
+				if (nodeKey > subtree->left->key) { // => L+R
 					x = subtree->left->right;
 					// Turn left the small subtree and then right the big subtree
 					y->right = x->left;
@@ -90,7 +90,7 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 			} else { // balance == +1 => R
 				z = subtree;
 				y = subtree->right;
-				if (node->key < subtree->right->key) { // => R+L
+				if (nodeKey < subtree->right->key) { // => R+L
 					x = subtree->right->left;
 					// Turn right the small subtree and then left the big subtree
 					y->left = x->right;
@@ -134,7 +134,12 @@ bool AVLTree<T>::insertNode(const Node<T>* node) {
 
 template<typename T>
 bool AVLTree<T>::deleteNode(const T& key) {
-
+	std::stack<Node<T>*> stackTree;
+	Node<T>* parent;
+	if (!BinarySearchTree<T>::deleteNode(BinarySearchTree<T>::root, &stackTree, &parent, key))
+		return false;
+	balanceTree(&parent, stackTree, key);
+	return true;
 }
 
 } /* namespace tree */

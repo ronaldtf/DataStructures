@@ -152,11 +152,14 @@ protected:
 	/**
 	 * Removes a node in the tree with a given value
 	 * @param[in] root Root node
-	 * @param[in] value Value to remove in the node
+	 * @param[in|out] stackTree Stack which indicates the path from the beginning to the deleted tree.
+	 * In case it is null, this parameter will be ignored.
+	 * @param[out] parent Parent tree for the removed node
+	 * @param[in] key Value to remove in the node
 	 * @return Returns whether it has been possible to remove the element from the tree (e.g. it will
 	 * return false if the value does not exist)
 	 */
-	bool deleteNode(Node<T>* rootNode, const T& value);
+	bool deleteNode(Node<T>* rootNode, std::stack<Node<T>*>* stackTree, Node<T>** parent, const T& key);
 private:
 	/**
 	 * Search the node with the minimum value

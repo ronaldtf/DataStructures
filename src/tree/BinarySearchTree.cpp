@@ -33,7 +33,8 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node) {
 
 template<typename T>
 bool BinarySearchTree<T>::deleteNode(const T& key) {
-	return deleteNode(BinarySearchTree<T>::root, key);
+	Node<T>* parent;
+	return deleteNode(this->root, nullptr, &parent, key);
 }
 
 template<typename T>
@@ -251,14 +252,14 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 }
 
 template<typename T>
-bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, const T& key) {
+bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, std::stack<Node<T>*>* stackTree, Node<T>** parent, const T& key) {
 
 	if (rootNode == nullptr)
 		return false;
 
 	// Search the node to be removed
-	Node<T>* parentNode = nullptr;
-	Node<T>* currNode = this->search(rootNode, key, &parentNode);
+	*parent = nullptr;
+	Node<T>* currNode = this->search(rootNode, key, parent);
 	// Node has not found => cannot delete it
 	if (currNode == nullptr)
 		return false;
@@ -272,14 +273,14 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, const T& key) {
 						((currNode->right != nullptr) ?
 								currNode->right : nullptr);
 		// 1. This is a root node => set child as root node
-		if (parentNode == nullptr)
+		if (*parent == nullptr)
 			rootNode = childNode;
 		// 2. Current node is not root => set current child as parent child
 		else {
-			if (currNode->key <= parentNode->key)
-				parentNode->left = childNode;
+			if (currNode->key <= (*parent)->key)
+				(*parent)->left = childNode;
 			else
-				parentNode->right = childNode;
+				(*parent)->right = childNode;
 		}
 		delete currNode;
 		currNode = nullptr;
@@ -291,7 +292,7 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, const T& key) {
 		// 2.2 Get minimum value
 		T minKey = min->key;
 		// 2.3 Remove node with such value
-		deleteNode(currNode, minKey);
+		deleteNode(minKey);
 		// 2.4 Update current node value
 		currNode->key = minKey;
 	}

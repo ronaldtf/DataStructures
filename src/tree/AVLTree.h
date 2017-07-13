@@ -29,9 +29,9 @@ private:
 	 * @param[in] parent Parent of the unbalanced subtree
 	 * @param[in] stackTree Stack with the nodes from the bottom to the top after the
 	 * insertion
-	 * @param[in] node Node that has been inserted
+	 * @param[in] nodeKey Key of the last node inserted
 	 */
-	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, Node<T>* node);
+	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, const T nodeKey);
 public:
 	/**
 	 * Class constructor
