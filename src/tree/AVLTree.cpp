@@ -68,12 +68,14 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 // the RR, RL, LL or LR movement
 	while (!stackTree.empty()) {
 		Node<T>* subtree = stackTree.top();
+
 		stackTree.pop();
 		int balance = BinarySearchTree<T>::getHeight(subtree->right)
 				- BinarySearchTree<T>::getHeight(subtree->left);
 		if (std::abs(balance) > 1) {
+			z = subtree;
+			BinarySearchTree<T>::search(BinarySearchTree<T>::root, z->key, parent);
 			if (balance == -1) { // => L
-				z = subtree;
 				y = subtree->left;
 				if (nodeKey > subtree->left->key) { // => L+R
 					x = subtree->left->right;
@@ -88,9 +90,11 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 					z->left = y->right;
 					y->right = z;
 				}
-				(*parent)->left = x;
+				if (*parent != nullptr)
+					(*parent)->left = y;
+				else
+					BinarySearchTree<T>::root = x;
 			} else { // balance == +1 => R
-				z = subtree;
 				y = subtree->right;
 				if (nodeKey < subtree->right->key) { // => R+L
 					x = subtree->right->left;
@@ -105,7 +109,11 @@ void AVLTree<T>::balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree,
 					z->right = y->left;
 					y->left = z;
 				}
-				(*parent)->right = y;
+				if (*parent != nullptr) {
+					(*parent)->right = x;
+				}
+				else
+					BinarySearchTree<T>::root = y;
 			}
 			break;
 		}
@@ -121,11 +129,12 @@ bool AVLTree<T>::insertNode(Node<T>* node) {
 
 	// This first part consists of inserting the node into the tree, without
 	// restrictions.
-	std::stack<Node<T>*> stackTree;
-	Node<T>* parent;
-	if (!BinarySearchTree<T>::insertNode(node, &stackTree, &parent))
+	std::stack<Node<T>*> stackTree = std::stack<Node<T>*>();
+	if (!BinarySearchTree<T>::insertNode(node, &stackTree))
 		return false;
 
+
+	Node<T>* parent = nullptr;
 	// This second part consists of balancing the tree
 	balanceTree(&parent, stackTree, node->key);
 	return true;
@@ -140,7 +149,7 @@ bool AVLTree<T>::deleteNode(const T& key) {
 	Node<T>* parent;
 	if (!BinarySearchTree<T>::deleteNode(BinarySearchTree<T>::root, &stackTree, &parent, key))
 		return false;
-	balanceTree(&parent, stackTree, key);
+	//balanceTree(&parent, stackTree, key);
 	return true;
 }
 

@@ -5,6 +5,7 @@
  */
 #include "AVLTree.h"
 #include "BinarySearchTree.h"
+#include <cassert>
 #include <iostream>
 #include <list>
 #include <string>
@@ -14,23 +15,7 @@
  */
 int main() {
 
-	tree::AVLTree<int> binaryTree = tree::AVLTree<int>();
-
-//	binaryTree.insertNode(25);
-//	binaryTree.insertNode(15);
-//	binaryTree.insertNode(50);
-//	binaryTree.insertNode(10);
-//	binaryTree.insertNode(22);
-//	binaryTree.insertNode(35);
-//	binaryTree.insertNode(70);
-//	binaryTree.insertNode(4);
-//	binaryTree.insertNode(12);
-//	binaryTree.insertNode(18);
-//	binaryTree.insertNode(24);
-//	binaryTree.insertNode(31);
-//	binaryTree.insertNode(44);
-//	binaryTree.insertNode(66);
-//	binaryTree.insertNode(90);
+	tree::BinarySearchTree<int> binaryTree = tree::BinarySearchTree<int>();
 
 	binaryTree.insertNode(new Node<int>(5));
 	binaryTree.insertNode(new ExtendedNode<int, int>(9, 9));
@@ -84,6 +69,30 @@ int main() {
 	std::cout << "Remove element 0" << std::endl;
 	binaryTree.deleteNode(0);
 	std::cout << binaryTree.toString() << std::endl;
+
+	Node<int>* four = binaryTree.search(4);
+	assert(four != nullptr);
+
+	Node<int>* three = binaryTree.search(3);
+	assert(three == nullptr);
+
+	tree::AVLTree<int> avlTree = tree::AVLTree<int>();
+
+	avlTree.insertNode(new Node<int>(1));
+	avlTree.insertNode(new ExtendedNode<int, int>(2, 2));
+	avlTree.insertNode(new Node<int>(3));
+
+	// Try to insert again the 2 => no effect
+	avlTree.insertNode(new Node<int>(2));
+
+	avlTree.insertNode(new Node<int>(7));
+	avlTree.insertNode(new Node<int>(6));
+	avlTree.insertNode(new Node<int>(14));
+	avlTree.insertNode(new Node<int>(4));
+	avlTree.insertNode(new Node<int>(0));
+	std::cout << avlTree.toString() << std::endl;
+
+
 
 	return 0;
 }

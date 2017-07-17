@@ -143,11 +143,9 @@ protected:
 	 * @param[in|out] stackTree List of nodes indicating the path followed to insert
 	 * the new node. Note: if the stackTree is originally null, the insertion on the
 	 * stack will be ignored
-	 * @param[out] parent Parent of the inserted node
 	 * @return Returns true if the node has been inserted, false otherwise
 	 */
-	bool insertNode(Node<T>* node, std::stack<Node<T>*>* stackTree,
-			Node<T>** parent);
+	bool insertNode(Node<T>* node, std::stack<Node<T>*>* stackTree);
 
 	/**
 	 * Removes a node in the tree with a given value

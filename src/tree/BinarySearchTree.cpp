@@ -27,8 +27,7 @@ BinarySearchTree<T>::~BinarySearchTree() {
 
 template<typename T>
 bool BinarySearchTree<T>::insertNode(Node<T>* node) {
-	Node<T>* parent;
-	return insertNode(node, nullptr, &parent);
+	return insertNode(node, nullptr);
 }
 
 template<typename T>
@@ -201,7 +200,11 @@ void BinarySearchTree<T>::getStrings(Node<T>* root, const unsigned int level,
 
 template<typename T>
 bool BinarySearchTree<T>::insertNode(Node<T>* node,
-		std::stack<Node<T>*>* stackTree, Node<T>** parent) {
+		std::stack<Node<T>*>* stackTree) {
+
+	// The node already exists
+	if (BinarySearchTree<T>::search(node->key) != nullptr)
+		return false;
 
 	// This first part consists of inserting the node into the tree, without
 	// restrictions. We could have use the BinarySearchTree<T>::insert method except
@@ -219,19 +222,18 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 	} else {
 		// Get the root
 		Node<T>* child = BinarySearchTree<T>::root;
-		*parent = nullptr;
 
 		// Go across the tree to search the corresponding gap for the element
 		while (true) {
-			*parent = child;
 			// Insert to the left
 			if (child->key > node->key) {
 				if (child->left == nullptr) {
 					child->left = node;
 					break;
 				}
-				if (stackTree != nullptr)
+				if (stackTree != nullptr) {
 					stackTree->push(child);
+				}
 				child = child->left;
 			}
 			// Insert to the right
@@ -240,8 +242,9 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 					child->right = node;
 					break;
 				}
-				if (stackTree != nullptr)
+				if (stackTree != nullptr) {
 					stackTree->push(child);
+				}
 				child = child->right;
 			} else
 				return false;
