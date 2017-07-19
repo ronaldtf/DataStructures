@@ -42,52 +42,52 @@ void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
 
 	Node<T>* parent = nullptr;
 
-//		LL CASE
-//		___________________________________________________________
-//		T1, T2, T3 and T4 are subtrees.
-//		         z                                      y
-//		        / \                                   /   \
-//		       y   T4      Right Rotate (z)          x      z
-//		      / \          - - - - - - - - ->      /  \    /  \
-//		     x   T3                               T1  T2  T3  T4
-//		    / \
-//		  T1   T2
+	//		LL CASE
+	//		___________________________________________________________
+	//		T1, T2, T3 and T4 are subtrees.
+	//		         z                                      y
+	//		        / \                                   /   \
+	//		       y   T4      Right Rotate (z)          x      z
+	//		      / \          - - - - - - - - ->      /  \    /  \
+	//		     x   T3                               T1  T2  T3  T4
+	//		    / \
+	//		  T1   T2
+	//
+	//		LR CASE
+	//		___________________________________________________________
+	//	     z                               z                           x
+	//	    / \                            /   \                        /  \
+	//	   y   T4  Left Rotate (y)        x    T4  Right Rotate(z)    y      z
+	//	  / \      - - - - - - - - ->    /  \      - - - - - - - ->  / \    / \
+	//	T1   x                          y    T3                    T1  T2 T3  T4
+	//	    / \                        / \
+	//	  T2   T3                    T1   T2
+	//
+	//		RR CASE
+	//		___________________________________________________________
+	//		  z                                y
+	//		 /  \                            /   \
+	//		T1   y     Left Rotate(z)       z      x
+	//		    /  \   - - - - - - - ->    / \    / \
+	//		   T2   x                     T1  T2 T3  T4
+	//		       / \
+	//		     T3  T4
+	//
+	//		RL CASE
+	//		___________________________________________________________
+	//		   z                            z                            x
+	//		  / \                          / \                          /  \
+	//		T1   y   Right Rotate (y)    T1   x      Left Rotate(z)   z      y
+	//		    / \  - - - - - - - - ->     /  \   - - - - - - - ->  / \    / \
+	//		   x   T4                      T2   y                  T1  T2  T3  T4
+	//		  / \                              /  \
+	//		T2   T3                           T3   T4
 
-//		LR CASE
-//		___________________________________________________________
-//	     z                               z                           x
-//	    / \                            /   \                        /  \
-//	   y   T4  Left Rotate (y)        x    T4  Right Rotate(z)    y      z
-//	  / \      - - - - - - - - ->    /  \      - - - - - - - ->  / \    / \
-//	T1   x                          y    T3                    T1  T2 T3  T4
-//	    / \                        / \
-//	  T2   T3                    T1   T2
-
-//		RR CASE
-//		___________________________________________________________
-//		  z                                y
-//		 /  \                            /   \
-//		T1   y     Left Rotate(z)       z      x
-//		    /  \   - - - - - - - ->    / \    / \
-//		   T2   x                     T1  T2 T3  T4
-//		       / \
-//		     T3  T4
-
-//		RL CASE
-//		___________________________________________________________
-//		   z                            z                            x
-//		  / \                          / \                          /  \
-//		T1   y   Right Rotate (y)    T1   x      Left Rotate(z)   z      y
-//		    / \  - - - - - - - - ->     /  \   - - - - - - - ->  / \    / \
-//		   x   T4                      T2   y                  T1  T2  T3  T4
-//		  / \                              /  \
-//		T2   T3                           T3   T4
-
-// If the stackTree is empty, the root node has 1 or 2 children.
-// Otherwise, we have to check whether it is balanced or not
-// To get the first unbalanced subtree, we go from the bottom to the top
-// The first time we find the unbalanced tree, we balance it by using
-// the RR, RL, LL or LR movement
+	// If the stackTree is empty, the root node has 1 or 2 children.
+	// Otherwise, we have to check whether it is balanced or not
+	// To get the first unbalanced subtree, we go from the bottom to the top
+	// The first time we find the unbalanced tree, we balance it by using
+	// the RR, RL, LL or LR movement
 	while (!stackTree.empty()) {
 		Node<T>* subtree = stackTree.top();
 		stackTree.pop();
@@ -139,7 +139,6 @@ void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
 	// Empty the stack tree
 	while (!stackTree.empty())
 		stackTree.pop();
-
 }
 
 template<typename T>
@@ -156,14 +155,12 @@ bool AVLTree<T>::insertNode(Node<T>* node) {
 	return true;
 }
 
-
-
 template<typename T>
 bool AVLTree<T>::deleteNode(const T& key) {
 	std::stack<Node<T>*> stackTree;
 	if (!BinarySearchTree<T>::deleteNode(key, &stackTree))
 		return false;
-//	balanceTree(stackTree, key);
+	balanceTree(stackTree, key);
 	return true;
 }
 
