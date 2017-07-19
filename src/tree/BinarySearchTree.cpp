@@ -15,15 +15,12 @@ namespace tree {
 template<typename T>
 BinarySearchTree<T>::BinarySearchTree() :
 		root(nullptr) {
-
 }
-;
 
 template<typename T>
 BinarySearchTree<T>::~BinarySearchTree() {
 	deleteTree(this->root);
 }
-;
 
 template<typename T>
 bool BinarySearchTree<T>::insertNode(Node<T>* node) {
@@ -250,13 +247,13 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 				return false;
 			}
 		}
-
 		return true;
 	}
 }
 
 template<typename T>
-bool BinarySearchTree<T>::deleteNode(const T& key, std::stack<Node<T>*>* stackTree) {
+bool BinarySearchTree<T>::deleteNode(const T& key,
+		std::stack<Node<T>*>* stackTree) {
 
 	// Search the node to be removed
 	Node<T> *parent = nullptr;

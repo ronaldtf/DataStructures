@@ -14,7 +14,31 @@ AVLTree<T>::AVLTree() :
 }
 
 template<typename T>
-void AVLTree<T>::pointParentToChild(Node<T>** root, Node<T>** parent, Node<T>** child) {
+bool AVLTree<T>::insertNode(Node<T>* node) {
+
+	// This first part consists of inserting the node into the tree, without
+	// restrictions.
+	std::stack<Node<T>*> stackTree = std::stack<Node<T>*>();
+	if (!BinarySearchTree<T>::insertNode(node, &stackTree))
+		return false;
+
+	// This second part consists of balancing the tree
+	balanceTree(stackTree, node->key);
+	return true;
+}
+
+template<typename T>
+bool AVLTree<T>::deleteNode(const T& key) {
+	std::stack<Node<T>*> stackTree;
+	if (!BinarySearchTree<T>::deleteNode(key, &stackTree))
+		return false;
+	balanceTree(stackTree, key);
+	return true;
+}
+
+template<typename T>
+void AVLTree<T>::pointParentToChild(Node<T>** root, Node<T>** parent,
+		Node<T>** child) {
 	if (*parent != nullptr) {
 		if ((*parent)->key < (*child)->key)
 			(*parent)->right = *child;
@@ -26,8 +50,7 @@ void AVLTree<T>::pointParentToChild(Node<T>** root, Node<T>** parent, Node<T>** 
 }
 
 template<typename T>
-void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
-		T nodeKey) {
+void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree, T nodeKey) {
 	Node<T>* x;
 	Node<T>* y;
 	Node<T>* z;
@@ -96,7 +119,8 @@ void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
 				- BinarySearchTree<T>::getHeight(subtree->left);
 		if (std::abs(balance) > 1) {
 			z = subtree;
-			BinarySearchTree<T>::search(BinarySearchTree<T>::root, z->key, &parent);
+			BinarySearchTree<T>::search(BinarySearchTree<T>::root, z->key,
+					&parent);
 			if (balance == -1) { // => L
 				y = subtree->left;
 				if (nodeKey > subtree->left->key) { // => L+R
@@ -106,13 +130,15 @@ void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
 					z->left = x->right;
 					x->left = y;
 					x->right = z;
-					pointParentToChild(&(BinarySearchTree<T>::root), &parent, &x);
+					pointParentToChild(&(BinarySearchTree<T>::root), &parent,
+							&x);
 				} else { // L+L
 					x = subtree->left->left;
 					// Turn left the subtree once
 					z->left = y->right;
 					y->right = z;
-					pointParentToChild(&(BinarySearchTree<T>::root), &parent, &y);
+					pointParentToChild(&(BinarySearchTree<T>::root), &parent,
+							&y);
 				}
 			} else { // balance == +1 => R
 				y = subtree->right;
@@ -123,13 +149,15 @@ void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
 					y->left = x->right;
 					x->left = z;
 					x->right = y;
-					pointParentToChild(&(BinarySearchTree<T>::root), &parent, &x);
+					pointParentToChild(&(BinarySearchTree<T>::root), &parent,
+							&x);
 				} else { // => R + R
 					x = subtree->right->right;
 					// Turn right the subtree once
 					z->right = y->left;
 					y->left = z;
-					pointParentToChild(&(BinarySearchTree<T>::root), &parent, &y);
+					pointParentToChild(&(BinarySearchTree<T>::root), &parent,
+							&y);
 				}
 			}
 
@@ -139,29 +167,6 @@ void AVLTree<T>::balanceTree(std::stack<Node<T>*>& stackTree,
 	// Empty the stack tree
 	while (!stackTree.empty())
 		stackTree.pop();
-}
-
-template<typename T>
-bool AVLTree<T>::insertNode(Node<T>* node) {
-
-	// This first part consists of inserting the node into the tree, without
-	// restrictions.
-	std::stack<Node<T>*> stackTree = std::stack<Node<T>*>();
-	if (!BinarySearchTree<T>::insertNode(node, &stackTree))
-		return false;
-
-	// This second part consists of balancing the tree
-	balanceTree(stackTree, node->key);
-	return true;
-}
-
-template<typename T>
-bool AVLTree<T>::deleteNode(const T& key) {
-	std::stack<Node<T>*> stackTree;
-	if (!BinarySearchTree<T>::deleteNode(key, &stackTree))
-		return false;
-	balanceTree(stackTree, key);
-	return true;
 }
 
 template class AVLTree<int> ;
