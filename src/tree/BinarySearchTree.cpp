@@ -32,8 +32,7 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node) {
 
 template<typename T>
 bool BinarySearchTree<T>::deleteNode(const T& key) {
-	Node<T>* parent;
-	return deleteNode(this->root, nullptr, &parent, key);
+	return deleteNode(key, nullptr);
 }
 
 template<typename T>
@@ -45,19 +44,21 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* node) {
 
 template<typename T>
 Node<T>* BinarySearchTree<T>::search(const T& key) const {
-	Node<T>* parent = nullptr; // This is not used here
-	return search(BinarySearchTree<T>::root, key, &parent);
+	return search(BinarySearchTree<T>::root, key, nullptr);
 }
 
 template<typename T>
 Node<T>* BinarySearchTree<T>::search(Node<T>* rootNode, const T& keyValue,
 		Node<T>** parent) const {
+	Node<T>* p = nullptr;
 	Node<T>* child = rootNode;
 	while (child != nullptr) {
 		if (child->key == keyValue) {
+			if (parent != nullptr)
+				*parent = p;
 			return child;
 		} else {
-			*parent = child;
+			p = child;
 			if (child->key >= keyValue) {
 				child = child->left;
 			} else {
@@ -65,6 +66,8 @@ Node<T>* BinarySearchTree<T>::search(Node<T>* rootNode, const T& keyValue,
 			}
 		}
 	}
+	if (parent != nullptr)
+		*parent = nullptr;
 	// Not found
 	return nullptr;
 }
@@ -202,10 +205,6 @@ template<typename T>
 bool BinarySearchTree<T>::insertNode(Node<T>* node,
 		std::stack<Node<T>*>* stackTree) {
 
-	// The node already exists
-	if (BinarySearchTree<T>::search(node->key) != nullptr)
-		return false;
-
 	// This first part consists of inserting the node into the tree, without
 	// restrictions. We could have use the BinarySearchTree<T>::insert method except
 	// because we need to keep the nodes we go through in order to, later,
@@ -225,14 +224,15 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 
 		// Go across the tree to search the corresponding gap for the element
 		while (true) {
+			// Insert the current node in the stack
+			if (stackTree != nullptr)
+				stackTree->push(child);
+
 			// Insert to the left
 			if (child->key > node->key) {
 				if (child->left == nullptr) {
 					child->left = node;
 					break;
-				}
-				if (stackTree != nullptr) {
-					stackTree->push(child);
 				}
 				child = child->left;
 			}
@@ -242,12 +242,13 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 					child->right = node;
 					break;
 				}
-				if (stackTree != nullptr) {
-					stackTree->push(child);
-				}
 				child = child->right;
-			} else
+			} else { // The node already exists
+				// Clean the stack tree before exiting
+				while (!stackTree->empty())
+					stackTree->pop();
 				return false;
+			}
 		}
 
 		return true;
@@ -255,14 +256,11 @@ bool BinarySearchTree<T>::insertNode(Node<T>* node,
 }
 
 template<typename T>
-bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, std::stack<Node<T>*>* stackTree, Node<T>** parent, const T& key) {
-
-	if (rootNode == nullptr)
-		return false;
+bool BinarySearchTree<T>::deleteNode(const T& key, std::stack<Node<T>*>* stackTree) {
 
 	// Search the node to be removed
-	*parent = nullptr;
-	Node<T>* currNode = this->search(rootNode, key, parent);
+	Node<T> *parent = nullptr;
+	Node<T>* currNode = this->search(this->root, key, &parent);
 	// Node has not found => cannot delete it
 	if (currNode == nullptr)
 		return false;
@@ -276,14 +274,14 @@ bool BinarySearchTree<T>::deleteNode(Node<T>* rootNode, std::stack<Node<T>*>* st
 						((currNode->right != nullptr) ?
 								currNode->right : nullptr);
 		// 1. This is a root node => set child as root node
-		if (*parent == nullptr)
-			rootNode = childNode;
+		if (parent == nullptr)
+			this->root = childNode;
 		// 2. Current node is not root => set current child as parent child
 		else {
-			if (currNode->key <= (*parent)->key)
-				(*parent)->left = childNode;
+			if (currNode->key < parent->key)
+				parent->left = childNode;
 			else
-				(*parent)->right = childNode;
+				parent->right = childNode;
 		}
 		delete currNode;
 		currNode = nullptr;

@@ -24,6 +24,14 @@ template<typename T>
 class AVLTree: public BinarySearchTree<T> {
 private:
 	/**
+	 * Set the child in the right place for the parent, or to the root if
+	 * the parent is NULL
+	 * @param[in|out] root   Root node of the tree
+	 * @param[in|out] parent Parent node
+	 * @param[in|out] child  Child node
+	 */
+	void pointParentToChild(Node<T>** root, Node<T>** parent, Node<T>** child);
+	/**
 	 * This method balances the tree by applying the RR, RL, LL, LR movements regarding
 	 * the condition of the balancing
 	 * @param[in] parent Parent of the unbalanced subtree
@@ -31,7 +39,7 @@ private:
 	 * insertion
 	 * @param[in] nodeKey Key of the last node inserted
 	 */
-	void balanceTree(Node<T>** parent, std::stack<Node<T>*>& stackTree, T nodeKey);
+	void balanceTree(std::stack<Node<T>*>& stackTree, T nodeKey);
 public:
 	/**
 	 * Class constructor
