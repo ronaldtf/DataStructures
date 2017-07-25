@@ -24,6 +24,7 @@ public:
 	 *                (2*d-1).
 	 */
 	Btree(unsigned short d = 1);
+	BNode<T>* search(const T& key);
 	virtual ~Btree();
 };
 

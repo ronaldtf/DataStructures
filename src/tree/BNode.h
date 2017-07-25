@@ -15,9 +15,10 @@ template <typename T>
 struct BNode {
 	BNode<T>** children;
 	T* keys;
+	T* values;
 	int nKeys;
 	unsigned short d;
-	BNode(unsigned short d) : children(nullptr), keys(nullptr), nKeys(0), d(d) {
+	BNode(unsigned short d) : children(nullptr), keys(nullptr), values(nullptr), nKeys(0), d(d) {
 	};
 	virtual ~BNode() {
 		if (nKeys > 0) {
@@ -25,6 +26,7 @@ struct BNode {
 				delete children[nkey];
 			delete children;
 			delete keys;
+			delete values;
 			nKeys = 0;
 		}
 	}
