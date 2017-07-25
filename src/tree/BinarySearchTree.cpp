@@ -19,7 +19,7 @@ BinarySearchTree<T>::BinarySearchTree() :
 
 template<typename T>
 BinarySearchTree<T>::~BinarySearchTree() {
-	deleteTree(this->root);
+	delete this->root;
 }
 
 template<typename T>
@@ -143,15 +143,6 @@ std::string BinarySearchTree<T>::toString() const {
 		output += s + "\n";
 	}
 	return output;
-}
-
-template<typename T>
-void BinarySearchTree<T>::deleteTree(Node<T>* root) {
-	if (root == nullptr)
-		return;
-	deleteTree(root->right);
-	deleteTree(root->left);
-	delete root;
 }
 
 template<typename T>

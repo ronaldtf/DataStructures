@@ -25,6 +25,8 @@ struct Node {
 		this->right = nullptr;
 	}
 	virtual ~Node() {
+		delete left;
+		delete right;
 	}
 	;
 	/**

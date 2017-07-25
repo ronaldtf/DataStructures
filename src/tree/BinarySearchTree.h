@@ -17,6 +17,15 @@ namespace tree {
 
 /**
  * This class defines the method for a binary tree
+ * NOTE: I have opted here to use a tree with pointers. However, it might be
+ * implemented as an array structure where each child for a node at position X is
+ * 2*(X+1)-1, 2*(X+1) - starting X at position 0.
+ * The (dis)advantages of the solution implementing here regarding the array are:
+ * - The array needs to be re-dimensioned when the maximum size has reached. The
+ *   solution here does not need relocate array positions as it uses pointers.
+ * - The access to an element of an array is 1 if we know the index. The access to
+ *   the structure implemented here is log(N). However, we rarely know the index
+ *   of the array by default.
  */
 template<typename T>
 class BinarySearchTree {
@@ -109,11 +118,6 @@ protected:
 	 */
 	Node<T>* search(Node<T>* rootNode, const T& keyValue,
 			Node<T>** parent) const;
-	/**
-	 * Deletes the tree from a node
-	 * @param[in] root Node to start removing
-	 */
-	void deleteTree(Node<T>* root);
 	/**
 	 * Converts an element of type T to a string
 	 * @param[in] element Element to convert
