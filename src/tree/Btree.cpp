@@ -47,4 +47,55 @@ BNode<T>* Btree<T>::search(const T& key) {
 	}
 }
 
+template <typename T>
+void Btree<T>::getInorder(std::list<T>& orderedList) const {
+	return getInorder(this->root, orderedList);
+}
+
+template <typename T>
+void Btree<T>::getInorder(BNode<T>* root, std::list<T>& orderedList) const {
+	if (root == nullptr)
+		return;
+	unsigned int i = 0;
+	for (; i < root->nkeys; ++i) {
+		getInorder(root->children[i], orderedList);
+		orderedList.push_back(root->keys[i]);
+	}
+	getInOrder(root->keys[i], orderedList);
+}
+
+template <typename T>
+void Btree<T>::getPreorder(std::list<T>& orderedList) const {
+	return getPreorder(this->root, orderedList);
+}
+
+template <typename T>
+void Btree<T>::getPreorder(BNode<T>* root, std::list<T>& orderedList) const {
+	if (root == nullptr)
+		return;
+	unsigned int i = 0;
+	for (; i < root->nkeys; ++i) {
+		orderedList.push_back(root->keys[i]);
+	}
+	for (i=0; i <= root->nkeys; ++i)
+		getPreorder(root->children[i], orderedList);
+}
+
+template <typename T>
+void Btree<T>::getPostorder(std::list<T>& orderedList) const {
+	return getPostorder(this->root, orderedList);
+}
+
+template <typename T>
+void Btree<T>::getPostorder(BNode<T>* root, std::list<T>& orderedList) const {
+	if (root == nullptr)
+		return;
+	unsigned int i = 0;
+	for (; i <= root->nkeys; ++i)
+		getPreorder(root->children[i], orderedList);
+	for (i=0; i < root->nkeys; ++i) {
+		orderedList.push_back(root->keys[i]);
+	}
+}
+
 } /* namespace tree */
