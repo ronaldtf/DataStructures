@@ -87,6 +87,17 @@ void Btree<T>::getPostorder(std::list<T>& orderedList) const {
 }
 
 template <typename T>
+bool Btree<T>::isLeaf(BNode<T>* node) {
+	if (node == nullptr)
+		return true;
+	for (unsigned int i=0; i<node->nKeys; ++i) {
+		if (node->children[i] != nullptr)
+			return false;
+	}
+	return true;
+}
+
+template <typename T>
 void Btree<T>::getPostorder(BNode<T>* root, std::list<T>& orderedList) const {
 	if (root == nullptr)
 		return;

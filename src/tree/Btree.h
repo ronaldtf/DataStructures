@@ -53,6 +53,12 @@ public:
 	 */
 	void getPostorder(std::list<T>& orderedList) const;
 	/**
+	 * Determines whether a node is a leaf node or not
+	 * @param[in] node Node to be checked
+	 * @return Returns whether the node is a leaf node or not
+	 */
+	bool isLeaf(BNode<T>* node);
+	/**
 	 * Insert an element into the tree
 	 * @param[in] element Element to insert in the tree
 	 * @return Returns whether the element has been inserted or, however, it
