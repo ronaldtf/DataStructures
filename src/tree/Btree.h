@@ -17,7 +17,7 @@ template <typename T>
 class Btree {
 private:
 	unsigned short d;
-	Btree<T>* root;
+	BNode<T>* root;
 public:
 	/**
 	 * Class constructor.
@@ -52,6 +52,13 @@ public:
 	 * @param[out] orderedList List in a post-order order
 	 */
 	void getPostorder(std::list<T>& orderedList) const;
+	/**
+	 * Insert an element into the tree
+	 * @param[in] element Element to insert in the tree
+	 * @return Returns whether the element has been inserted or, however, it
+	 * already existed in the tree
+	 */
+	bool insert(T& element);
 private:
 	/**
 	 * Go along the tree in an in-order order.
