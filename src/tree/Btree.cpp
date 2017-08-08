@@ -19,14 +19,15 @@ Btree<T>::~Btree() {
 
 template <typename T>
 BNode<T>* Btree<T>::search(const T& key) {
-	if (this->root == nullptr)
-		return nullptr;
 
 	// Start in the root node
 	BNode<T>* node = this->root;
-	unsigned short nkeys = this->root->nkeys;
+	unsigned short nkeys;
 
 	while (true) {
+		if (node == nullptr)
+			return nullptr;
+		nkeys = node->nKeys;
 		unsigned short nkey = 0;
 		// Look until the key in the current node is higher or equal than the
 		// existing key or the last key was reached
@@ -36,14 +37,15 @@ BNode<T>* Btree<T>::search(const T& key) {
 		// The key was found
 		if ((nkey < nkeys) && (node->keys[nkey] == nkeys))
 			return node;
+		// Verify this in case current node is a leaf node
+		if (node->children == nullptr)
+			return nullptr;
+
 		// The key was not found:
 		// 1. The key at nkey is higher than the searched key => take left child
 		// 2. The key is higher than any key in the current node => take the right
 		//     child (nkey is already nkeys + 1 => it points to the right child)
 		node = node->children[nkey];
-		if (node == nullptr)
-			return nullptr;
-		nkeys = node->nkeys;
 	}
 }
 
