@@ -58,7 +58,11 @@ public:
 	 * @return Returns whether the node is a leaf node or not
 	 */
 	bool isLeaf(BNode<T>* node);
-
+	/**
+	 * Insert an element into the tree (if it does not exist yet)
+	 * @param[in] key	Key to add to the tree
+	 * @param[in] value	Value associated to the key
+	 */
 	bool insert(T& key, T& value);
 private:
 	/**
