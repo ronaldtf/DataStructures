@@ -120,15 +120,20 @@ void Btree<T>::insertSortedInNode(T& element, std::vector<T>& v) {
 }
 
 template <typename T>
+void Btree<T>::initNode(BNode<T>** node, T& key, T& value) {
+	*node = new BNode<T>();
+	(*node)->keys.push_back(key);
+	(*node)->values.push_back(value);
+	(*node)->children = std::vector<T>();
+	(*node)->children.insert(2*d-1, nullptr);
+}
+
+template <typename T>
 bool Btree<T>::insertElement(T& key, T& value, BNode<T>* node, BNode<T>** parent) {
 
 	// 1. The root node is null => create the root node
 	if (node ==  nullptr) {
-		node = new BNode<T>();
-		node->keys.push_back(key);
-		node->values.push_back(value);
-		node->children = std::vector<T>();
-		node->children.insert(2*d-1, nullptr);
+		initNode(&node, key, value);
 		return true;
 	}
 
@@ -160,7 +165,7 @@ bool Btree<T>::insertElement(T& key, T& value, BNode<T>* node, BNode<T>** parent
 	T& midValue = node->keys.at(d-1);
 
 	// Split the current node into two parts:
-	// a. Create a right subnode with the right half (without the middle element)
+	// a. Create a right sub-node with the right half (without the middle element)
 	// b. Remove to the current node that right half (including the middle element)
 	//    This is the same as creating a node with the left part, but it is more efficient
 	BNode<T>* rightSubtree = new  BNode<T>();
@@ -173,11 +178,7 @@ bool Btree<T>::insertElement(T& key, T& value, BNode<T>* node, BNode<T>** parent
 
 	// There is no parent node => set the new mid node as parent node
 	if (parent == nullptr) {
-		root = new BNode<T>();
-		root->keys.push_back(midKey);
-		root->values.push_back(midValue);
-		root->children = std::vector<T>();
-		root->children.insert(2*d-1, nullptr);
+		initNode(&(this->root), key, value);
 		root->childrent.at(0) = node;
 		root->children.at(1) = rightSubtree;
 		return true;

@@ -84,6 +84,13 @@ private:
 	 */
 	void getPostorder(BNode<T>* root, std::list<T>& orderedList) const;
 	/**
+	 * Initialize a node and its children
+	 * @param[out] node	 Node to initialize
+	 * @param[in]  key	 Key to set to the node
+	 * @param[in]  value Value to set to the node
+	 */
+	void initNode(BNode<T>** node, T& key, T& value);
+	/**
 	 * Insert an element into the tree
 	 * @param[in] key Key element to insert in the tree
 	 * @param[in] value Value element to insert in the tree
