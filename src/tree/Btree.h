@@ -22,8 +22,8 @@ public:
 	/**
 	 * Class constructor.
 	 * @param[in] d: minimum degree term. This defines the number of
-	 *               minimum keys per node (d-1) and the maximum
-	 *                (2*d-1).
+	 *               minimum keys per node (d-1) - except for the root -
+	 *               and the maximum (2*d-1).
 	 */
 	Btree(unsigned short d = 1);
 	/**
@@ -58,13 +58,8 @@ public:
 	 * @return Returns whether the node is a leaf node or not
 	 */
 	bool isLeaf(BNode<T>* node);
-	/**
-	 * Insert an element into the tree
-	 * @param[in] element Element to insert in the tree
-	 * @return Returns whether the element has been inserted or, however, it
-	 * already existed in the tree
-	 */
-	bool insert(T& element);
+
+	bool insert(T& key, T& value);
 private:
 	/**
 	 * Go along the tree in an in-order order.
@@ -74,16 +69,30 @@ private:
 	void getInorder(BNode<T>* root, std::list<T>& orderedList) const;
 	/**
 	 * Go along the tree in n pre-order order.
-	 * @param[in] root Root node
+	 * @param[in]  root        Root node
 	 * @param[out] orderedList List in a pre-order order
 	 */
 	void getPreorder(BNode<T>* root, std::list<T>& orderedList) const;
 	/**
 	 * Go along the tree in a post-order order.
-	 * @param[in] root Root node
+	 * @param[in]  root        Root node
 	 * @param[out] orderedList List in a post-order order
 	 */
 	void getPostorder(BNode<T>* root, std::list<T>& orderedList) const;
+	/**
+	 * Insert an element into the tree
+	 * @param[in] key Key element to insert in the tree
+	 * @param[in] value Value element to insert in the tree
+	 * @param[in] node Node where to star the insertion
+	 * @param[in] parent Parent node for the current one
+	 */
+	bool insertElement(T& key, T&value, BNode<T>* node, BNode<T>** parent);
+	/**
+	 * Insert an element in the sorted place of the node (ascending order)
+	 * @param[in]  element Element to add
+	 * @param[out] v       Vector to place the element
+	 */
+	void insertSortedInNode(T& element, std::vector<T>& v);
 };
 
 } /* namespace tree */

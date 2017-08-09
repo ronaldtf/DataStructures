@@ -8,27 +8,23 @@
 #define SRC_TREE_BNODE_H_
 
 #include <string>
+#include <vector>
 
 namespace tree {
 
 template <typename T>
 struct BNode {
-	BNode<T>** children;
-	T* keys;
-	T* values;
-	int nKeys;
-	unsigned short d;
-	BNode(unsigned short d) : children(nullptr), keys(nullptr), values(nullptr), nKeys(0), d(d) {
+	std::vector<T> keys;
+	std::vector<T> values;
+	std::vector<BNode<T>*> children;
+	BNode() : keys(), values(), children() {
 	};
 	virtual ~BNode() {
-		if (nKeys > 0) {
-			for (unsigned short nkey = 0; nkey < nKeys+1; ++nkey)
-				delete children[nkey];
-			delete children;
-			delete keys;
-			delete values;
-			nKeys = 0;
-		}
+		keys.clear();
+		values.clear();
+		for (BNode<T>* node : children)
+			delete node;
+		children.clear();
 	}
 };
 }
