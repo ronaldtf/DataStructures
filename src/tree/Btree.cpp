@@ -6,6 +6,8 @@
 
 #include "Btree.h"
 
+#include <algorithm>
+
 namespace tree {
 
 template <typename T>
@@ -19,14 +21,22 @@ Btree<T>::~Btree() {
 
 template <typename T>
 BNode<T>* Btree<T>::search(const T& key) {
+	BNode<T>* parent = nullptr;
+	return search(key, &parent);
+}
+
+template <typename T>
+BNode<T>* Btree<T>::search(const T& key, BNode<T>** parent) {
 
 	// Start in the root node
 	BNode<T>* node = this->root;
 	unsigned short nkeys;
 
 	while (true) {
-		if (node == nullptr)
+		if (node == nullptr) {
+			parent = nullptr;
 			return nullptr;
+		}
 		nkeys = node->keys.size();
 		unsigned short nkey = 0;
 		// Look until the key in the current node is higher or equal than the
@@ -42,6 +52,7 @@ BNode<T>* Btree<T>::search(const T& key) {
 		// 1. The key at nkey is higher than the searched key => take left child
 		// 2. The key is higher than any key in the current node => take the right
 		//     child (nkey is already nkeys + 1 => it points to the right child)
+		*parent = node;
 		node = node->children.at(nkey);
 	}
 }
@@ -191,6 +202,136 @@ bool Btree<T>::insertElement(T& key, T& value, BNode<T>* node, BNode<T>** parent
 	for (; i < node->keys.size() && node->keys.at(i) < midKey; ++i);
 	(*parent)->children.emplace((*parent)->children.begin() + i, rightSubtree);  // emplace child in the right place of the parent
 	return insert(midKey, midValue, parent);
+}
+
+template <typename T>
+void Btree<T>::rotateAndKeepSibling(BNode<T>** sibling, BNode<T>** parent, BNode<T>** target, size_t parentI, size_t posSibling) {
+	// Replace parent key/value with right/left key/value of sibling...
+	T& parentKey = (*parent)->keys.at(parentI);
+	T& parentValue = (*parent)->values.at(parentI);
+	std::replace((*parent)->keys.begin()+parentI, (*parent)->keys.begin()+parentI+1, parentKey, (*sibling)->keys.at(posSibling));
+	std::replace((*parent)->values.begin()+parentI, (*parent)->values.begin()+parentI+1, parentValue, (*sibling)->values.at(posSibling));
+
+	// ... and append original parent (to keep it in a sorted way, we have to check whether we have to set
+	//     it at the beginning or at the end of the vector)
+	size_t tmpPos = (posSibling == 0) ? (*target)->keys.size() : 0;
+	(*target)->keys.insert((*target)->keys.begin()+tmpPos, (*target)->keys.begin()+tmpPos+1, parentKey);
+	(*target)->value.insert((*target)->values.begin()+tmpPos, (*target)->values.begin()+tmpPos+1, parentValue);
+}
+
+template <typename T>
+bool Btree<T>::remove(T& key) {
+	BNode<T>* parent = nullptr;
+	BNode<T>* node = search(key, &parent);
+	if (node == nullptr)
+		return false;
+	return remove(key, &node, &parent);
+}
+
+template <typename T>
+void Btree<T>::mergeAndRemove(BNode<T>** sibling, BNode<T>** target, BNode<T>** parent, size_t parentI) {
+	// Insert parent as an element of current node
+	(*target)->keys.insert((*target)->keys.end(), (*parent)->keys.at(parentI));
+	(*target)->values.insert((*target)->values.end(), (*parent)->values.at(parentI));
+	// Insert sibling keys/values into current node
+	(*target)->keys.insert((*target)->keys.end(), (*sibling)->keys.begin(), sibling->keys.end());
+	(*target)->values.insert((*target)->values.end(), (*sibling)->values.begin(), (*sibling)->values.end());
+	// Clear sibling keys/values
+	(*sibling)->keys.clear();
+	(*sibling)->values.clear();
+	// Remove parent node
+	(*parent)->keys.erase((*parent)->keys.begin() + parentI, (*parent)->keys.begin() + parentI + 1);
+	(*parent)->values.erase((*parent)->values.begin() + parentI, (*parent)->values.begin() + parentI + 1);
+	// Remove child for removed parent node
+	(*parent)->children.erase((*parent)->children.begin() + parentI, (*parent)->children.end() + parentI + 1);
+}
+
+template <typename T>
+bool Btree<T>::remove(T& key, BNode<T>**node, BNode<T>**parent) {
+
+	// Look for key position of the parent node
+	size_t parentI = -1;
+	if (*parent != nullptr)
+		for (parentI=0; parentI < (*parent)->keys.size() - 1 && (*parent)->keys.at(parentI) < key; ++parentI);
+
+	// Get position of the key within the node
+	size_t posKey = 0;
+	for (; posKey < (*node)->keys.size() && (*node)->keys.at(posKey) != key; ++posKey);
+
+	// 1. The node is a leaf:
+	if (isLeaf(*node)) {
+		// 1.1 Number of keys in node >= d or it is the root node
+		if (((*node)->keys.size() >= d) || ((*parent) == nullptr)) {
+			// Simply remove the key from the node (it is a leaf node, therefore, there
+			// is no problem with children)
+			(*node)->keys.erase((*node)->keys.begin()+posKey, (*node)->keys.begin()+posKey+1);
+			(*node)->keys.erase((*node)->values.begin()+posKey, (*node)->values.begin()+posKey+1);
+			return true;
+		}
+
+		// 1.2 Number of keys in node == d-1
+		else {
+			// Find sibling nodes
+			BNode<T>* left = (*parent)->children(parentI);
+			BNode<T>* right = (*parent)->children.at(parentI+1);
+
+			T& nodeKey = (*node)->keys.at(posKey); // == key
+			T& nodeValue = (*node)->values.at(posKey);
+			// Remove current key/value...
+			(*node)->keys.erase((*node)->keys.begin()+posKey, (*node)->keys.begin()+posKey+1);
+			(*node)->values.erase((*node)->values.begin()+posKey, (*node)->values.begin()+posKey+1);
+
+			//    1.2.1 Sibling nodes with >= d
+			if ((left->keys.size() >= d) || (right->keys.size() >= d)) {
+				size_t posSibling = (left->keys.size() >= d) ? left->keys.size() - 1 : 0;
+				BNode<T>* sibling = (left->keys.size() >= d) ? left : right;
+
+				// Copy parent key/value to the node and sibling key/value to the parent
+				rotate(&sibling, parent, node, parentI, posSibling);
+				// ... remove sibling key/value
+				sibling->keys.erase(sibling->keys.begin()+posSibling, sibling->keys.begin()+posSibling+1);
+				sibling->values.erase(sibling->values.begin()+posSibling, sibling->values.begin()+posSibling+1);
+
+				return true;
+			}
+			//    1.2.2 Sibling nodes with <= d-1
+			else {
+				// Merge node with sibling:
+
+				// Verify whether current node is the top right child of the parent and get the sibling accordingly
+				bool isLastChild = ((*parent)->keys.at(parent) < key);
+				BNode<T>* sibling = isLastChild ?  (*parent)->children.at(parentI) : (*parent)->children.at(parentI+1);
+				if (isLastChild)
+					std::swap(node, sibling);
+				mergeAndRemove(&sibling, node, parent, parentI);
+
+				return true;
+			}
+		}
+	}
+
+
+	// 2. The node is an internal node
+	//    2.1 Number of keys in left child node >= d
+	BNode<T>* left = (*node)->children(posKey);
+	BNode<T>* right = (*node)->children.at(posKey+1);
+	if (left->keys.size() >= d) {
+		T lkey = left->keys.at(left->keys.size()-1);
+		rotateAndKeepSibling(&left, node, &right, posKey, left->keys.size() -1);
+		return remove(lkey, &left, node);
+	}
+	//    2.2 Number of keys in right child node >= d
+	else if (right->keys.size() >= d) {
+		T rkey = left->keys.at(0);
+		rotateAndKeepSibling(&right, node, &left, posKey, 0);
+		return remove(rkey, &right, node);
+	}
+	//    2.3 Number of keys in left and right children == d-1
+	else {
+		mergeAndRemove(&left, &right, parent, posKey);
+		return true;
+	}
+
 }
 
 } /* namespace tree */

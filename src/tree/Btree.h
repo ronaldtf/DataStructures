@@ -64,6 +64,12 @@ public:
 	 * @param[in] value	Value associated to the key
 	 */
 	bool insert(T& key, T& value);
+	/**
+	 * Removes an element from the tree (if exists)
+	 * @param[in] key 	Key to remove
+	 * @return 	Returns whether the node has been removed or not
+	 */
+	bool remove(T& key);
 private:
 	/**
 	 * Go along the tree in an in-order order.
@@ -83,6 +89,14 @@ private:
 	 * @param[out] orderedList List in a post-order order
 	 */
 	void getPostorder(BNode<T>* root, std::list<T>& orderedList) const;
+	/**
+	 * Search a given key in the b-tree
+	 * @param[in] key 		Key to find
+	 * @param[out] parent	Parent node for the searched key
+	 * @return Returns the node which contains the key, or nullptr
+	 * if it is not found
+	 */
+	BNode<T>* search(const T& key, BNode<T>** parent);
 	/**
 	 * Initialize a node and its children
 	 * @param[out] node	 Node to initialize
@@ -104,6 +118,32 @@ private:
 	 * @param[out] v       Vector to place the element
 	 */
 	void insertSortedInNode(T& element, std::vector<T>& v);
+	/**
+	 * Removes an element from the tree starting from the node
+	 * @param[in] key Key to remove
+	 * @param[in] node Node to start searching
+	 * @param[in] parent Parent of the node
+	 */
+	bool remove(T& key, BNode<T>**node, BNode<T>**parent);
+	/**
+	 * Copies the sibling key/value at a given position into the parent
+	 * and the parent key/values to the target node
+	 * @param[in] sibling Sibling node of the target
+	 * @param[in] parent  Parent node of the target
+	 * @param[in] target  Target node
+	 * @param[in] parentI Position at the parent to be replace by the sibling
+	 * @param[in] posSibling Position at the sibling whose key/value replace
+	 *                    current parent ones
+	 */
+	void rotateAndKeepSibling(BNode<T>** sibling, BNode<T>** parent, BNode<T>** target, size_t parentI, size_t posSibling);
+	/**
+	 * Merge two siblings and remove the parent node
+	 * @param[in] sibling Sibling node of the target node
+	 * @param[in] target Target node
+	 * @param[in] parent Parent node of siblings
+	 * @param[in] parentI Position of the key parent for siblings
+	 */
+	void mergeAndRemove(BNode<T>** sibling, BNode<T>** target, BNode<T>** parent, size_t parentI);
 };
 
 } /* namespace tree */
