@@ -328,8 +328,22 @@ bool Btree<T>::remove(T& key, BNode<T>**node, BNode<T>**parent) {
 	}
 	//    2.3 Number of keys in left and right children == d-1
 	else {
-		mergeAndRemove(&left, &right, parent, posKey);
-		return true;
+		if ((*node)->keys.size() == d-1) {
+			BNode<T>* tmp = right;
+			BNode<T>* tmpParent = node;
+			// Look for the minimum value on the right
+			while (!isLeaf(tmp)) {
+				tmpParent = tmp;
+				tmp = tmp->children.at(0);
+			}
+			(*node)->keys.at(posKey) = tmp->keys.at(0);
+			(*node)->values.at(posKey) = tmp->values.at(0);
+
+			return remove(tmp->keys.at(0), tmp, tmpParent);
+		} else {
+			mergeAndRemove(left, right, node, posKey);
+			return true;
+		}
 	}
 
 }
