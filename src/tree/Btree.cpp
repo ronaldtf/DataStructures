@@ -234,7 +234,7 @@ void Btree<T>::mergeAndRemove(BNode<T>** sibling, BNode<T>** target, BNode<T>** 
 	(*target)->keys.insert((*target)->keys.end(), (*parent)->keys.at(parentI));
 	(*target)->values.insert((*target)->values.end(), (*parent)->values.at(parentI));
 	// Insert sibling keys/values into current node
-	(*target)->keys.insert((*target)->keys.end(), (*sibling)->keys.begin(), sibling->keys.end());
+	(*target)->keys.insert((*target)->keys.end(), (*sibling)->keys.begin(), (*sibling)->keys.end());
 	(*target)->values.insert((*target)->values.end(), (*sibling)->values.begin(), (*sibling)->values.end());
 	// Clear sibling keys/values
 	(*sibling)->keys.clear();
