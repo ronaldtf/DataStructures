@@ -13,7 +13,7 @@
 
 namespace tree {
 
-template <typename T>
+template<typename T>
 class Btree {
 private:
 	unsigned short d;
@@ -108,16 +108,17 @@ private:
 	 * Insert an element into the tree
 	 * @param[in] key Key element to insert in the tree
 	 * @param[in] value Value element to insert in the tree
-	 * @param[in] node Node where to star the insertion
+	 * @param[in] node Reference to the node where to start the insertion
 	 * @param[in] parent Parent node for the current one
 	 */
-	bool insertElement(T& key, T&value, BNode<T>* node, BNode<T>** parent);
+	bool insertElement(T& key, T&value, BNode<T>** node, BNode<T>** parent);
 	/**
 	 * Insert an element in the sorted place of the node (ascending order)
-	 * @param[in]  element Element to add
-	 * @param[out] v       Vector to place the element
+	 * @param[in]  key Key to add
+	 * @param[in]  value Value to add
+	 * @param[out] node Node to insert the values
 	 */
-	void insertSortedInNode(T& element, std::vector<T>& v);
+	void insertInNoFullNode(T key, T value, BNode<T>** node);
 	/**
 	 * Removes an element from the tree starting from the node
 	 * @param[in] key Key to remove
@@ -135,7 +136,8 @@ private:
 	 * @param[in] posSibling Position at the sibling whose key/value replace
 	 *                    current parent ones
 	 */
-	void rotateAndKeepSibling(BNode<T>** sibling, BNode<T>** parent, BNode<T>** target, size_t parentI, size_t posSibling);
+	void rotateAndKeepSibling(BNode<T>** sibling, BNode<T>** parent,
+			BNode<T>** target, size_t parentI, size_t posSibling);
 	/**
 	 * Merge two siblings and remove the parent node
 	 * @param[in] sibling Sibling node of the target node
@@ -143,7 +145,25 @@ private:
 	 * @param[in] parent Parent node of siblings
 	 * @param[in] parentI Position of the key parent for siblings
 	 */
-	void mergeAndRemove(BNode<T>** sibling, BNode<T>** target, BNode<T>** parent, size_t parentI);
+	void mergeAndRemove(BNode<T>** sibling, BNode<T>** target,
+			BNode<T>** parent, size_t parentI);
+	/**
+	 * Get the position a key is found in the node, or the next one if not available
+	 * @param[in] node Node to search in
+	 * @param[in] key Key to search
+	 * @return Position in the node
+	 */
+	size_t getPositionInNode(BNode<T>* node, T& key) const;
+
+	/**
+	 * Split the node in two parts
+	 * @param[in|out] originalAndLeftNode Original node and left part of the node after the splitting.
+	 * @param[out] right Right node after the splitting
+	 * @param[out] midKey Key in the middle
+	 * @param[out] midValue Value in the middle
+	 */
+	void splitNode(BNode<T>** originalAndLeftNode, BNode<T>** right, T& midKey,
+			T& midValue);
 };
 
 } /* namespace tree */
