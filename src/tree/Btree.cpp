@@ -210,7 +210,7 @@ bool Btree<T>::insertElement(T& key, T& value, BNode<T>** node,
 		size_t parentPos = getPositionInNode(*tmpParent, key);
 		(*tmpParent)->children.emplace((*tmpParent)->children.begin() + parentPos+1, key);
 		if ((*tmpParent)->keys.size() <= 2*d -1)
-			break;
+			return true;
 		else {
 			node = tmpParent;
 			search(midKey, tmpParent);
